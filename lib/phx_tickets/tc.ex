@@ -106,4 +106,33 @@ defmodule PhxTickets.TC do
   def change_ticket(%Ticket{} = ticket, attrs \\ %{}) do
     Ticket.changeset(ticket, attrs)
   end
+
+  def get_user_tickets(user_id, cur_ticket) do
+    ttype = cur_ticket.type
+    IO.inspect(ttype, label: "Current Ticket Type")
+    case ttype do
+      "Epic" ->
+        []
+      "Story" ->
+        from(t in Ticket,
+          where: t.user_id == ^user_id and t.type == ^"Epic",
+          order_by: [desc: t.inserted_at]
+        )
+        |> Repo.all()
+
+      "Task" ->
+        from(t in Ticket,
+          where: t.user_id == ^user_id and t.type == ^"Story",
+          order_by: [desc: t.inserted_at]
+        )
+        |> Repo.all()
+
+      _ ->
+        from(t in Ticket,
+          where: t.user_id == ^user_id and t.type != "Epic",
+          order_by: [desc: t.inserted_at]
+        )
+        |> Repo.all()
+    end
+  end
 end

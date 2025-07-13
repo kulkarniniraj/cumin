@@ -36,6 +36,15 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
 
   @impl true
   def update(%{ticket: ticket} = assigns, socket) do
+    tickets = TC.get_user_tickets(assigns.current_user.id, ticket)
+    tickets |> Enum.map(fn t -> t.id end) |>
+    IO.inspect(label: "User Tickets IDs")
+
+    # IO.inspect(tickets, label: "Tickets for user")
+    ticket_options =
+      Enum.map(tickets, fn t ->
+        {t.title, t.id}
+      end)
     {:ok,
      socket
      |> assign(assigns)
@@ -43,7 +52,9 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
      |> assign(:type_options, ["Epic", "Story", "Task"])
      |> assign_new(:form, fn ->
        to_form(TC.change_ticket(ticket))
-     end)}
+     end)
+     |> assign(:tickets, ticket_options)
+    }
 
   end
 
