@@ -1,7 +1,9 @@
 defmodule PhxTicketsWeb.TicketLive.Show do
   use PhxTicketsWeb, :live_view
 
+
   alias PhxTickets.TC
+  import PhxTicketsWeb.CustomComponents, only: [progressbar: 1]
 
   @impl true
   def mount(_params, _session, socket) do
