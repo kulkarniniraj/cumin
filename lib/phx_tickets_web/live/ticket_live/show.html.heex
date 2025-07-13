@@ -11,8 +11,12 @@
 <.list>
   <:item title="Creator">{@ticket.user.email}</:item>
   <:item title="Title">{@ticket.title}</:item>
+  <:item title="Type">{@ticket.type}</:item>
   <:item title="Description">{@ticket.description}</:item>
   <:item title="Status">{@ticket.status}</:item>
+  <:item title="Parent"> {(@ticket.parent && @ticket.parent.title) || "None"} </:item>
+  <%!-- <:item title="Parent"> {@ticket.parent.title || "None"} </:item> --%>
+  <:item title="Children"> Children </:item>  
 </.list>
 
 <.back navigate={~p"/tickets"}>Back to tickets</.back>
