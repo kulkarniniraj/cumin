@@ -25,6 +25,8 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
         options={@type_options} />
         <.input field={@form[:status]} type="select" label="Status"
         options={@status_options} />
+        <.input field={@form[:parent_id]} type="select" label="Parent"
+        options={@tickets} />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Ticket</.button>
