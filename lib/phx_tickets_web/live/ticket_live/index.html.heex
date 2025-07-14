@@ -7,10 +7,10 @@
   </:actions>
 </.header>
 <h1>Current user: {@current_user.email}</h1>
-<.table
+<.ticket_table
   id="tickets"
   rows={@streams.tickets}
-  row_click={fn {_id, ticket} -> JS.navigate(~p"/tickets/#{ticket}") end}
+  row_click={fn {_id, ticket} -> JS.navigate(~p"/tickets/#{ticket}") end}  
 >
   <:col :let={{_id, ticket}} label="Title">{ticket.title}</:col>
   <:col :let={{_id, ticket}} label="Type">{ticket.type}</:col>
@@ -30,7 +30,7 @@
       Delete
     </.link>
   </:action>
-</.table>
+</.ticket_table>
 
 <.modal :if={@live_action in [:new, :edit]} id="ticket-modal" show on_cancel={JS.patch(~p"/tickets")}>
   <.live_component
