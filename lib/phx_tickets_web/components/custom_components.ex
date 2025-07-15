@@ -1,7 +1,7 @@
 defmodule PhxTicketsWeb.CustomComponents do
   use Phoenix.Component
 
-  alias Phoenix.LiveView.JS
+  # alias Phoenix.LiveView.JS
 
   @doc """
   Custome Progressbar for tickets
