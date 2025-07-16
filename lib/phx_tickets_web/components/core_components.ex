@@ -541,10 +541,10 @@ defmodule PhxTicketsWeb.CoreComponents do
       end
 
     ~H"""
-    <div class="overflow-y-auto pr-8 my-2  w-full max-w-4xl rounded  max-h-[32rem]">
+    <div class="overflow-y-auto px-6 my-2  w-full rounded  max-h-[28rem] border-2 border-zinc-200">
       <table class="divide-y min-w-full sm:w-full px-2">
         <thead class="sticky top-0 text-lg text-left leading-6 text-zinc-500 bg-white z-50">
-          <tr class="p-2 ">
+          <tr class="">
             <th :for={col <- @col} class="py-2 px-2 font-normal">{col[:label]}</th>
             <th :if={@action != []} class="relative p-0 pb-4">
               <span class="sr-only">{gettext("Actions")}</span>
@@ -707,7 +707,7 @@ defmodule PhxTicketsWeb.CoreComponents do
 
   def back(assigns) do
     ~H"""
-    <div class="mt-16">
+    <div class="mt-2">
       <.link
         navigate={@navigate}
         class="text-sm font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
