@@ -38,7 +38,9 @@
   </div>
 <.progressbar complete={10.0} inprogress={20.0} open={70.0}/>
 
-
+<!-- Comment Section -->
+<%!-- <.comments comments={@ticket.comments}/> --%>
+<.comments comments={@comments} current_user={@current_user}/>
 
 <.modal :if={@live_action == :edit} id="ticket-modal" show on_cancel={JS.patch(~p"/tickets/#{@ticket}")}>
   <.live_component

@@ -54,4 +54,47 @@ defmodule PhxTicketsWeb.CustomComponents do
     """
   end
 
+  attr :comment, :string, required: true
+  attr :user, :string, required: true
+  attr :date, :string, required: true
+  def comment(assigns) do
+    ~H"""
+    <div class="bg-gray-100 p-4 rounded">
+      <div class="flex items-center mb-2">
+        <span class="font-bold mr-2">{@user}</span>
+        <span class="text-xs text-gray-500">{@date}</span>
+      </div>
+      <div>{@comment}</div>
+      <%= if @user == "Alice" do %>
+        <div class="flex gap-4 mt-3">
+          <a href="#" class="text-blue-600 hover:underline text-sm">Edit</a>
+          <a href="#" class="text-red-600 hover:underline text-sm">Delete</a>
+        </div>
+      <% end %>
+    </div>
+    """
+  end
+
+  attr :comments, :list, default: []
+  def comments(assigns) do
+    ~H"""
+    <div class="mt-8">
+      <h2 class="text-lg font-semibold mb-4">Comments</h2>
+      <form class="flex gap-2 mb-6">
+        <input type="text" placeholder="Add a comment..." class="flex-1 rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Add</button>
+      </form>
+      <div class="space-y-4">
+        <%= for comment <- @comments do %>
+          <.comment comment={comment.comment} user={comment.user} date={comment.date}/>
+        <% end %>
+      </div>
+    </div>
+    """
+  end
+
+end
+
+defmodule PhxTicketsWeb.CustomComponents.Comment do
+  defstruct [:comment, :user, :date]
 end
