@@ -5,6 +5,12 @@ defmodule PhxTicketsWeb.UserSettingsLive do
 
   def render(assigns) do
     ~H"""
+    <a href="#" onclick="window.history.back(); return false;" class="inline-flex items-center text-sm text-blue-600 hover:underline mb-4">
+      <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+      Go Back
+    </a>
     <.header class="text-center">
       Account Settings
       <:subtitle>Manage your account email address and password settings</:subtitle>
