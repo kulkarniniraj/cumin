@@ -36,7 +36,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
     case status do
       "open" -> "bg-red-500"
       "in_progress" -> "bg-blue-500"
-      "done" -> "bg-green-500"
+      "closed" -> "bg-green-500"
     end
   end
 end
