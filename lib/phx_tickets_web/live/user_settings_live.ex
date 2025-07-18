@@ -13,6 +13,19 @@ defmodule PhxTicketsWeb.UserSettingsLive do
     <div class="space-y-12 divide-y">
       <div>
         <.simple_form
+          for={@name_form}
+          id="name_form"
+          phx-submit="update_name"
+        >
+          <.input field={@name_form[:name]} type="text" label="Name" required id="name_form_name"/>
+          <:actions>
+            <.button phx-disable-with="Changing...">Change Name</.button>
+          </:actions>
+        </.simple_form>
+      </div>
+
+      <div>
+        <.simple_form
           for={@email_form}
           id="email_form"
           phx-submit="update_email"
@@ -90,6 +103,7 @@ defmodule PhxTicketsWeb.UserSettingsLive do
     user = socket.assigns.current_user
     email_changeset = Accounts.change_user_email(user)
     password_changeset = Accounts.change_user_password(user)
+    name_changeset = Accounts.user_name_changeset(user)
 
     socket =
       socket
@@ -98,7 +112,9 @@ defmodule PhxTicketsWeb.UserSettingsLive do
       |> assign(:current_email, user.email)
       |> assign(:email_form, to_form(email_changeset))
       |> assign(:password_form, to_form(password_changeset))
+      |> assign(:name_form, to_form(name_changeset))
       |> assign(:trigger_submit, false)
+      |> assign(:name_form_name, user.name)
 
     {:ok, socket}
   end
@@ -113,6 +129,20 @@ defmodule PhxTicketsWeb.UserSettingsLive do
       |> to_form()
 
     {:noreply, assign(socket, email_form: email_form, email_form_current_password: password)}
+  end
+
+  def handle_event("update_name", params, socket) do
+    IO.inspect(params, label: "update_name params")
+    %{"user" => user_params} = params
+    user = socket.assigns.current_user
+
+    case Accounts.change_user_name(user, user_params) do
+      {:ok, user} ->
+        {:noreply, assign(socket, name_form_name: user.name)}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, name_form: to_form(changeset))}
+    end
   end
 
   def handle_event("update_email", params, socket) do

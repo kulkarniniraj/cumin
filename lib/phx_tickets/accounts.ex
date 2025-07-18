@@ -108,6 +108,16 @@ defmodule PhxTickets.Accounts do
     User.email_changeset(user, attrs, validate_email: false)
   end
 
+  def user_name_changeset(user, attrs \\ %{}) do
+    User.name_changeset(user, attrs)
+  end
+
+  def change_user_name(user, attrs \\ %{}) do
+    user
+    |> User.name_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Emulates that the email will change without actually changing
   it in the database.
