@@ -50,4 +50,20 @@ defmodule PhxTicketsWeb.TicketLive.Index do
 
     {:noreply, stream_delete(socket, :tickets, ticket)}
   end
+
+  def handle_event("filter",
+    %{
+      "create_time" => create_time,
+      "creator" => creator,
+      "status" => status,
+      "type" => type
+    }, socket) do
+    IO.inspect(type, label: "Filter Type")
+    {:noreply,
+      socket
+      |> stream(:tickets, [], reset: true)
+      |> stream(:tickets,
+       TC.list_filtered_tickets(creator, type, status, create_time)
+    )}
+  end
 end

@@ -21,6 +21,24 @@ defmodule PhxTickets.TC do
     Repo.all(Ticket)
   end
 
+  def list_filtered_tickets(user, type, status, create_time) do
+    query = from t in Ticket
+
+    query = if type != "" do
+      where(query, [t], t.type == ^type)
+    else
+      query
+    end
+
+    query = if status != "" do
+      where(query, [t], t.status == ^status)
+    else
+      query
+    end
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single ticket.
 
