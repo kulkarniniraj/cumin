@@ -40,8 +40,8 @@
 
 **Ticket List**
 
-![Ticket List](./assets/images/ticket_list.png)
+![Ticket List](./assets/images/list.png)
 
 **Ticket Show**
 
-![Ticket Show](./assets/images/ticket_show.png)
+![Ticket Show](./assets/images/details.png)
