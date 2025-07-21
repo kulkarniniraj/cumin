@@ -62,8 +62,7 @@ defmodule PhxTickets.TC do
   """
   def get_ticket!(id) do
     Repo.get!(Ticket, id)
-    |> Repo.preload([:user, :parent])
-    |> IO.inspect(label: "Loaded Ticket")
+    |> Repo.preload([:user, :parent, :children])
   end
 
   @doc """
