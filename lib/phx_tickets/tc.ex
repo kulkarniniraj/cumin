@@ -21,6 +21,13 @@ defmodule PhxTickets.TC do
     Repo.all(Ticket)
   end
 
+  def list_filtered_tickets("default") do
+    Ticket
+    |> where([t], t.status in ["open", "in_progress"])
+    |> where([t], t.type != "Epic")
+    |> Repo.all()
+  end
+
   def list_filtered_tickets(user, type, status, create_time) do
     query = from t in Ticket
 

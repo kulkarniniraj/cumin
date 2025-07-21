@@ -11,7 +11,7 @@ defmodule PhxTicketsWeb.TicketLive.Index do
       socket
       |> assign(:current_user, user)
       |> IO.inspect(label: "Current User")
-      |> stream(:tickets, TC.list_tickets())}
+      |> stream(:tickets, TC.list_filtered_tickets("default"))}
   end
 
   @impl true
