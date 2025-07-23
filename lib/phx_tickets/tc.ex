@@ -25,11 +25,13 @@ defmodule PhxTickets.TC do
     Ticket
     |> where([t], t.status in ["open", "in_progress"])
     |> where([t], t.type != "Epic")
+    |> where([t], t.deleted == false)
     |> Repo.all()
   end
 
   def list_filtered_tickets(user, type, status, create_time) do
-    query = from t in Ticket
+    query = from t in Ticket,
+      where: t.deleted == false
 
     query = if type != "" do
       where(query, [t], t.type == ^type)
@@ -115,7 +117,9 @@ defmodule PhxTickets.TC do
 
   """
   def delete_ticket(%Ticket{} = ticket) do
-    Repo.delete(ticket)
+    ticket
+    |> Ticket.changeset(%{deleted: true})
+    |> Repo.update()
   end
 
   @doc """

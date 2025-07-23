@@ -10,6 +10,7 @@ defmodule PhxTickets.TC.Ticket do
     belongs_to :user, PhxTickets.Accounts.User
     belongs_to :parent, __MODULE__, foreign_key: :parent_id, type: :id
     has_many :children, __MODULE__, foreign_key: :parent_id
+    field :deleted, :boolean, default: false
 
     timestamps(type: :utc_datetime)
   end
@@ -18,7 +19,7 @@ defmodule PhxTickets.TC.Ticket do
   def changeset(ticket, attrs) do
     IO.inspect(attrs, label: "Ticket Changeset Attributes")
     ticket
-    |> cast(attrs, [:title, :description, :status, :user_id, :parent_id, :type])
+    |> cast(attrs, [:title, :description, :status, :deleted, :user_id, :parent_id, :type])
     |> validate_required([:title, :status, :user_id, :type])
     |> assoc_constraint(:user)
     |> assoc_constraint(:parent)
