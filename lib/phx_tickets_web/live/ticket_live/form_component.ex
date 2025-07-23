@@ -22,11 +22,11 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
         <.input field={@form[:title]} type="text" label="Title" />
         <.input field={@form[:description]} type="textarea" label="Description" />
         <.input field={@form[:type]} type="select" label="Type"
-        options={@type_options} />
+        options={@type_options} prompt="Select ticket type" />
         <.input field={@form[:status]} type="select" label="Status"
         options={@status_options} value={@ticket.status} />
         <.input field={@form[:parent_id]} type="select" label="Parent"
-        options={@tickets} value={@ticket.parent_id || ""} />
+        options={@tickets} value={@ticket.parent_id || ""} prompt="Select parent ticket" />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Ticket</.button>
