@@ -49,6 +49,28 @@ defmodule PhxTickets.TC do
   end
 
   @doc """
+  Returns the list of parent tickets.
+  For Story, Epic tickets are returned
+  For Task, Story tickets are returned
+
+  Only tickets which are not deleted and open or in_progress are returned
+
+  ## Examples
+
+      iex> list_parent_tickets("Story")
+      [%Ticket{}, ...]
+
+  """
+  def list_parent_tickets(ticket_type) do
+    parent_type = if ticket_type == "Story", do: "Epic", else: "Story"
+    Ticket
+    |> where([t], t.type == ^parent_type)
+    |> where([t], t.deleted == false)
+    |> where([t], t.status in ["open", "in_progress"])
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single ticket.
 
   Raises `Ecto.NoResultsError` if the Ticket does not exist.

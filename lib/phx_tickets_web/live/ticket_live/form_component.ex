@@ -36,17 +36,20 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
     """
   end
 
+  defp tickets_to_options(tickets) do
+    Enum.map(tickets, fn t ->
+      {t.title, t.id}
+    end)
+  end
+
   @impl true
   def update(%{ticket: ticket} = assigns, socket) do
-    tickets = TC.get_user_tickets(assigns.current_user.id, ticket)
-    tickets |> Enum.map(fn t -> t.id end) |>
-    IO.inspect(label: "User Tickets IDs")
+    ticket_options = if ticket.type in ["Story", "Task"] do
+      ticket.type |> TC.list_parent_tickets() |> tickets_to_options()
+    else
+      []
+    end
 
-    # IO.inspect(tickets, label: "Tickets for user")
-    ticket_options =
-      Enum.map(tickets, fn t ->
-        {t.title, t.id}
-      end)
     {:ok,
      socket
      |> assign(assigns)
@@ -70,9 +73,12 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
     changeset = TC.change_ticket(socket.assigns.ticket, ticket_params)
 
     show_parent = if type == "Epic", do: false, else: true
+
     {:noreply,
       socket
       |> assign(:show_parent, show_parent)
+      |> assign(:tickets,
+            type |> TC.list_parent_tickets() |> tickets_to_options())
       |> assign(:form, to_form(changeset, action: :validate))
     }
   end
