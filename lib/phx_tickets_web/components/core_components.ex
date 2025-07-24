@@ -597,7 +597,10 @@ defmodule PhxTicketsWeb.CoreComponents do
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class="relative" >
                   {{_, r} = row
-                  r.inserted_at}
+                    # NaiveDateTime.to_string(r.inserted_at)
+                    dt = Timex.to_datetime(r.inserted_at, "Asia/Kolkata")
+                    Calendar.strftime(dt, "%A, %B %d, %Y at %H:%M")
+                  }
                 </span>
               </div>
             </td>

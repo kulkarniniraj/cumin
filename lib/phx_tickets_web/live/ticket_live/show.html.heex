@@ -29,7 +29,10 @@
   </div>
   <div>
     <span class="block text-sm font-semibold text-gray-700">Created</span>
-    <span>{@ticket.inserted_at}</span>
+    <span>{ 
+      dt = Timex.to_datetime(@ticket.inserted_at, "Asia/Kolkata")
+      Calendar.strftime(dt, "%A, %B %d, %Y at %H:%M")
+    }</span>
   </div>
 </div>
 <div class="mt-4">
