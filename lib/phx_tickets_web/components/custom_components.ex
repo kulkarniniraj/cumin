@@ -4,23 +4,30 @@ defmodule PhxTicketsWeb.CustomComponents do
 
   # alias Phoenix.LiveView.JS
 
+  defp calculate_progress(ticket) do
+    total = ticket.children
+    |> Enum.count()
+    completed = ticket.children
+    |> Enum.count(& &1.status == "closed")
+    inprogress = ticket.children
+    |> Enum.count(& &1.status == "in_progress")
+    open = ticket.children
+    |> Enum.count(& &1.status == "open")
+    {total, completed, inprogress, open} |> IO.inspect(label: "Progress details")
+    {
+      completed * 100 / total,
+      inprogress * 100 / total,
+      open * 100 / total
+    }
+  end
   @doc """
   Custome Progressbar for tickets
   """
-  attr :complete, :float, default: 0.0
-  attr :inprogress, :float, default: 0.0
-  attr :open, :float, default: 100.0
+  attr :ticket, :map, required: true
 
   def progressbar(assigns) do
-    complete = assigns[:complete] || 0.0
-    inprogress = assigns[:inprogress] || 0.0
-    open = assigns[:open] || 100.0
-
-    total = complete + inprogress + open
-    assigns
-    |> assign(:complete, complete / total * 100.0)
-    |> assign(:inprogress, inprogress / total * 100.0)
-    |> assign(:open, open / total * 100.0)
+    ticket = assigns[:ticket]
+    {complete, inprogress, open} = calculate_progress(ticket)
 
     ~H"""
     <div class="w-full  mx-auto mt-8">
@@ -30,11 +37,11 @@ defmodule PhxTicketsWeb.CustomComponents do
       </div>
       <div class="flex h-6 w-full rounded overflow-hidden shadow bg-gray-200">
         <!-- Completed (Green) -->
-        <div class="bg-green-500 h-full" style={"width: #{@complete}%"}></div>
+        <div class="bg-green-500 h-full" style={"width: #{complete}%"}></div>
         <!-- In Progress (Blue) -->
-        <div class="bg-blue-500 h-full" style={"width: #{@inprogress}%"}></div>
+        <div class="bg-blue-500 h-full" style={"width: #{inprogress}%"}></div>
         <!-- Open (Red) -->
-        <div class="bg-red-500 h-full" style={"width: #{@open}"}></div>
+        <div class="bg-red-500 h-full" style={"width: #{open}%"}></div>
       </div>
       <!-- Legend -->
       <div class="flex justify-between mt-2 text-sm">

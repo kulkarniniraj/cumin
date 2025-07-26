@@ -46,7 +46,7 @@
     <span class="block text-sm font-semibold text-gray-700">Description</span>
     <span>{@ticket.description}</span>
   </div>
-<.progressbar :if={@ticket.children != []} complete={10.0} inprogress={20.0} open={70.0}/>
+<.progressbar :if={@ticket.children != []} ticket={@ticket}/>
 
 <%!-- Child Tickets --%>
 <.child_tickets child_tickets={@ticket.children} self_ticket={@ticket}/>
