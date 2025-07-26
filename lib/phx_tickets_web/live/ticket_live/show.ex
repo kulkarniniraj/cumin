@@ -4,7 +4,8 @@ defmodule PhxTicketsWeb.TicketLive.Show do
 
   alias PhxTicketsWeb.CustomComponents
   alias PhxTickets.TC
-  import PhxTicketsWeb.CustomComponents, only: [progressbar: 1, comment: 1, comments: 1]
+  import PhxTicketsWeb.CustomComponents, only:
+    [progressbar: 1, comment: 1, comments: 1, child_tickets: 1]
 
   @impl true
   def mount(_params, session, socket) do
@@ -56,7 +57,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
   defp page_title(:show), do: "Show Ticket"
   defp page_title(:edit), do: "Edit Ticket"
 
-  defp status_to_color(status) do
+  def status_to_color(status) do
     case status do
       "open" -> "bg-red-500"
       "in_progress" -> "bg-blue-500"

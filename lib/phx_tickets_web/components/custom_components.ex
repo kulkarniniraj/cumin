@@ -95,6 +95,55 @@ defmodule PhxTicketsWeb.CustomComponents do
     """
   end
 
+
+  def child_ticket(assigns) do
+    ~H"""
+    <!-- Child Ticket -->
+    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+      <div class="flex items-center justify-between">
+        <div class="flex-1">
+          <h3 class="font-semibold text-gray-900">{@ticket.title}</h3>
+          <div class="flex items-center gap-4 mt-1 text-sm text-gray-600">
+            <span>Type: {@ticket.type}</span>
+            <span class={["inline-block px-2 py-1 rounded text-xs font-semibold text-white", PhxTicketsWeb.TicketLive.Show.status_to_color(@ticket.status)]}>{@ticket.status}</span>
+
+            <span>Created: {@ticket.inserted_at}</span>
+          </div>
+        </div>
+        <a href="/tickets/#{@ticket.id}/show" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">View →</a>
+      </div>
+    </div>
+    """
+  end
+
+  def child_tickets(assigns) do
+    ~H"""
+    <!-- Child Tickets Section -->
+    <div class="mt-8 ">
+        <h2 class="text-lg font-semibold mb-4">Child Tickets</h2>
+
+        <div class="space-y-3">
+          <%= for ticket <- @child_tickets do %>
+            <.child_ticket ticket={ticket}/>
+          <% end %>
+
+        </div>
+
+        <!-- Add Child Ticket Button -->
+        <div class="mt-4">
+          <a href="/tickets/new?parent_id=31" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <span class="mr-2">+</span>
+            Add Child Ticket
+          </a>
+        </div>
+
+        <%!-- horizontal line --%>
+        <div class="mt-4">
+          <hr class="border-gray-200">
+        </div>
+      </div>
+    """
+  end
 end
 
 defmodule PhxTicketsWeb.CustomComponents.Comment do

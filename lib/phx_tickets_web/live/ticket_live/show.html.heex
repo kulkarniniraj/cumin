@@ -48,6 +48,9 @@
   </div>
 <.progressbar :if={@ticket.children != []} complete={10.0} inprogress={20.0} open={70.0}/>
 
+<%!-- Child Tickets --%>
+<.child_tickets child_tickets={@ticket.children}/>
+
 <!-- Comment Section -->
 <%!-- <.comments comments={@ticket.comments}/> --%>
 <.comments comments={@comments} current_user={@current_user} form={@form} formid={@formid}/>
