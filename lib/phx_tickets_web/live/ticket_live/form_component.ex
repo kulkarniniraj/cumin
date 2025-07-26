@@ -23,10 +23,10 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
         <.input field={@form[:description]} type="textarea" label="Description" />
         <.input field={@form[:type]} type="select" label="Type"
         options={@type_options} prompt="Select ticket type" />
-        <.input field={@form[:status]} type="select" label="Status"
-        options={@status_options} value={@ticket.status} />
         <.input :if={@show_parent} field={@form[:parent_id]} type="select" label="Parent"
         options={@tickets} value={@ticket.parent_id || ""} prompt="Select parent ticket" />
+        <.input field={@form[:status]} type="select" label="Status"
+        options={@status_options} value={@ticket.status} />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Ticket</.button>
@@ -60,6 +60,7 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
        to_form(TC.change_ticket(ticket))
      end)
      |> assign(:tickets, ticket_options)
+     |> IO.inspect(label: "Socket in new ticket")
     }
 
   end
