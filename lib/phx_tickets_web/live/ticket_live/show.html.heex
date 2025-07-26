@@ -25,7 +25,14 @@
   </div>
   <div>
     <span class="block text-sm font-semibold text-gray-700">Parent</span>
-    <span>{(@ticket.parent && @ticket.parent.title) || "None"}</span>
+    <span>
+      <%= if @ticket.parent do %>
+        <.link class="text-indigo-600 hover:text-indigo-800 font-medium" 
+        href={~p"/tickets/#{@ticket.parent}"}>{@ticket.parent.title}</.link>
+      <% else %>
+        None
+      <% end %>
+    </span>
   </div>
   <div>
     <span class="block text-sm font-semibold text-gray-700">Created</span>
