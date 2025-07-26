@@ -1,5 +1,6 @@
 defmodule PhxTicketsWeb.CustomComponents do
   use Phoenix.Component
+  import PhxTicketsWeb.CoreComponents
 
   # alias Phoenix.LiveView.JS
 
@@ -80,10 +81,11 @@ defmodule PhxTicketsWeb.CustomComponents do
     ~H"""
     <div class="mt-8">
       <h2 class="text-lg font-semibold mb-4">Comments</h2>
-      <form class="flex gap-2 mb-6">
-        <input type="text" placeholder="Add a comment..." class="flex-1 rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+
+      <.form class="flex gap-2 mb-6" for={@form} phx-submit="add_comment" id={"form-#{@formid}"}>
+        <input name="comment" type="text" placeholder="Add a comment..." class="flex-1 rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
         <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Add</button>
-      </form>
+      </.form>
       <div class="space-y-4">
         <%= for comment <- @comments do %>
           <.comment comment={comment.comment} user={comment.user} date={comment.date}/>

@@ -26,7 +26,31 @@ defmodule PhxTicketsWeb.TicketLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:ticket, TC.get_ticket!(id))
-     |> assign(:comments, comments)}
+     |> assign(:comments, comments)
+     |> assign(:form,
+        to_form(TC.change_comment(%TC.Comment{})))
+      |> assign(:formid, :rand.uniform())
+    }
+  end
+
+  @impl true
+  def handle_event("add_comment", params, socket) do
+    IO.inspect(params, label: "Params")
+    IO.inspect(socket.assigns.ticket.id, label: "Ticket")
+    # IO.inspect(socket.assigns.current_user, label: "Current User")
+    TC.create_comment(%{
+      body: params["comment"],
+      ticket_id: socket.assigns.ticket.id
+    })
+
+    # assign form with random id to force refresh
+    {
+      :noreply,
+      socket
+      |> assign(:form, to_form(
+        TC.change_comment(%TC.Comment{})))
+      |> assign(:formid, :rand.uniform())
+    }
   end
 
   defp page_title(:show), do: "Show Ticket"

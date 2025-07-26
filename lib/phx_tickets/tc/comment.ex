@@ -12,7 +12,7 @@ defmodule PhxTickets.TC.Comment do
   @doc false
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [:body])
-    |> validate_required([:body])
+    |> cast(attrs, [:body, :ticket_id])
+    |> validate_required([:body, :ticket_id])
   end
 end
