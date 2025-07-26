@@ -79,7 +79,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   attr :comments, :list, default: []
   def comments(assigns) do
     ~H"""
-    <div class="mt-8">
+    <div class="mt-8 mb-8">
       <h2 class="text-lg font-semibold mb-4">Comments</h2>
 
       <.form class="flex gap-2 mb-6" for={@form} phx-submit="add_comment" id={"form-#{@formid}"}>
