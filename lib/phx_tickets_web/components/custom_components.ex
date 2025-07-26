@@ -110,7 +110,7 @@ defmodule PhxTicketsWeb.CustomComponents do
             <span>Created: {@ticket.inserted_at}</span>
           </div>
         </div>
-        <a href="/tickets/#{@ticket.id}/show" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">View →</a>
+        <.link href={"/tickets/#{@ticket.id}"} class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">View →</.link>
       </div>
     </div>
     """
@@ -119,7 +119,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   def child_tickets(assigns) do
     ~H"""
     <!-- Child Tickets Section -->
-    <div class="mt-8 ">
+    <div class="mt-8 " :if={@self_ticket.type != "Task"}>
         <h2 class="text-lg font-semibold mb-4">Child Tickets</h2>
 
         <div class="space-y-3">
