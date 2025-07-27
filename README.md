@@ -1,5 +1,7 @@
-# Cumin
-## An opinionated project management system for small orgs
+<div align="center">
+  <img src="./assets/images/cumin-logo/vector/default-monochrome.svg" alt="Cumin Logo" width="120" height="120">
+  <p><strong>An opinionated project management system for small orgs</strong></p>
+</div>
 
 ---
 
@@ -45,3 +47,5 @@
 **Ticket Show**
 
 ![Ticket Show](./assets/images/details.png)
+
+Logo created with [Namecheap](https://www.namecheap.com)
