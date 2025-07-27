@@ -11,6 +11,7 @@ defmodule PhxTickets.TC.Ticket do
     belongs_to :parent, __MODULE__, foreign_key: :parent_id, type: :id
     has_many :children, __MODULE__, foreign_key: :parent_id
     field :deleted, :boolean, default: false
+    has_many :comments, PhxTickets.TC.Comment
 
     timestamps(type: :utc_datetime)
   end
