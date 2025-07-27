@@ -52,6 +52,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
       |> assign(:form, to_form(
         TC.change_comment(%TC.Comment{})))
       |> assign(:formid, :rand.uniform())
+      |> assign(:ticket, TC.get_ticket!(socket.assigns.ticket.id))
     }
   end
 
