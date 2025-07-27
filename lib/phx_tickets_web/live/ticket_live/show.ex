@@ -19,9 +19,9 @@ defmodule PhxTicketsWeb.TicketLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     comments = [
-      %CustomComponents.Comment{comment: "Great work on this ticket! Looking forward to the update.", user: "Alice", date: "2024-07-12 10:15"},
-      %CustomComponents.Comment{comment: "Can we clarify the requirements for the next phase?", user: "Bob", date: "2024-07-12 11:00"},
-      %CustomComponents.Comment{comment: "I have pushed a fix for the reported bug.", user: "Charlie", date: "2024-07-12 12:30"}
+      %CustomComponents.Comment{body: "Great work on this ticket! Looking forward to the update.", user: "Alice", inserted_at: "2024-07-12 10:15"},
+      %CustomComponents.Comment{body: "Can we clarify the requirements for the next phase?", user: "Bob", inserted_at: "2024-07-12 11:00"},
+      %CustomComponents.Comment{body: "I have pushed a fix for the reported bug.", user: "Charlie", inserted_at: "2024-07-12 12:30"}
     ]
     {:noreply,
      socket
