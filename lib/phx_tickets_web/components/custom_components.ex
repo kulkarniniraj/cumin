@@ -1,6 +1,7 @@
 defmodule PhxTicketsWeb.CustomComponents do
   use Phoenix.Component
   import PhxTicketsWeb.CoreComponents
+  alias PhxTicketsWeb.CommonUtils
 
   # alias Phoenix.LiveView.JS
 
@@ -75,7 +76,7 @@ defmodule PhxTicketsWeb.CustomComponents do
     <div class="bg-gray-100 p-4 rounded">
       <div class="flex items-center mb-2">
         <span class="font-bold mr-2">{user_name}</span>
-        <span class="text-xs text-gray-500">{@comment.inserted_at}</span>
+        <span class="text-xs text-gray-500">{CommonUtils.format_date(@comment.inserted_at, true)}</span>
       </div>
       <div>{@comment.body}</div>
       <%= if @user == "Alice" do %>
@@ -93,6 +94,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   attr :formid, :any, required: true
   attr :current_user, :any, required: true
   def comments(assigns) do
+    reverse_comments = Enum.reverse(assigns.comments)
     ~H"""
     <div class="mt-8 mb-8">
       <h2 class="text-lg font-semibold mb-4">Comments</h2>
@@ -102,7 +104,7 @@ defmodule PhxTicketsWeb.CustomComponents do
         <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Add</button>
       </.form>
       <div class="space-y-4">
-        <%= for comment <- @comments do %>
+        <%= for comment <- reverse_comments do %>
           <.comment
             comment={comment}
             user={@current_user.id}
