@@ -62,17 +62,22 @@ defmodule PhxTicketsWeb.CustomComponents do
     """
   end
 
-  attr :comment, :string, required: true
-  attr :user, :string, required: true
-  attr :date, :string, required: true
+  attr :comment, :any, required: true
+  attr :user, :any, required: true
   def comment(assigns) do
+    user_name = if assigns.comment.user_id == assigns.user do
+      "You"
+    else
+      assigns.comment.user.name
+    end
+
     ~H"""
     <div class="bg-gray-100 p-4 rounded">
       <div class="flex items-center mb-2">
-        <span class="font-bold mr-2">{@user}</span>
-        <span class="text-xs text-gray-500">{@date}</span>
+        <span class="font-bold mr-2">{user_name}</span>
+        <span class="text-xs text-gray-500">{@comment.inserted_at}</span>
       </div>
-      <div>{@comment}</div>
+      <div>{@comment.body}</div>
       <%= if @user == "Alice" do %>
         <div class="flex gap-4 mt-3">
           <a href="#" class="text-blue-600 hover:underline text-sm">Edit</a>
@@ -84,6 +89,9 @@ defmodule PhxTicketsWeb.CustomComponents do
   end
 
   attr :comments, :list, default: []
+  attr :form, :any, required: true
+  attr :formid, :any, required: true
+  attr :current_user, :any, required: true
   def comments(assigns) do
     ~H"""
     <div class="mt-8 mb-8">
@@ -96,9 +104,9 @@ defmodule PhxTicketsWeb.CustomComponents do
       <div class="space-y-4">
         <%= for comment <- @comments do %>
           <.comment
-            comment={comment.body}
-            user={if true, do: "Anonymous", else: comment.user}
-            date={comment.inserted_at}/>
+            comment={comment}
+            user={@current_user.id}
+            />
         <% end %>
       </div>
     </div>
