@@ -95,7 +95,10 @@ defmodule PhxTicketsWeb.CustomComponents do
       </.form>
       <div class="space-y-4">
         <%= for comment <- @comments do %>
-          <.comment comment={comment.comment} user={comment.user} date={comment.date}/>
+          <.comment
+            comment={comment.body}
+            user={if true, do: "Anonymous", else: comment.user}
+            date={comment.inserted_at}/>
         <% end %>
       </div>
     </div>
@@ -154,5 +157,5 @@ defmodule PhxTicketsWeb.CustomComponents do
 end
 
 defmodule PhxTicketsWeb.CustomComponents.Comment do
-  defstruct [:comment, :user, :date]
+  defstruct [:body, :user, :inserted_at]
 end

@@ -53,7 +53,11 @@
 
 <!-- Comment Section -->
 <%!-- <.comments comments={@ticket.comments}/> --%>
-<.comments comments={@comments} current_user={@current_user} form={@form} formid={@formid}/>
+<.comments 
+    comments={@ticket.comments} 
+    current_user={@current_user} 
+    form={@form} 
+    formid={@formid}/>
 
 <.modal :if={@live_action == :edit} id="ticket-modal" show on_cancel={JS.patch(~p"/tickets/#{@ticket}")}>
   <.live_component
