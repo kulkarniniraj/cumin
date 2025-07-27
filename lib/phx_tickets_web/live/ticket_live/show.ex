@@ -41,7 +41,8 @@ defmodule PhxTicketsWeb.TicketLive.Show do
     # IO.inspect(socket.assigns.current_user, label: "Current User")
     TC.create_comment(%{
       body: params["comment"],
-      ticket_id: socket.assigns.ticket.id
+      ticket_id: socket.assigns.ticket.id,
+      user_id: socket.assigns.current_user.id
     })
 
     # assign form with random id to force refresh

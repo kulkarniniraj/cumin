@@ -10,6 +10,7 @@ defmodule PhxTickets.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
     has_many :tickets, PhxTickets.TC.Ticket
+    has_many :comments, PhxTickets.TC.Comment
 
     timestamps(type: :utc_datetime)
   end
