@@ -18,6 +18,7 @@ defmodule PhxTicketsWeb.CoreComponents do
   use Gettext, backend: PhxTicketsWeb.Gettext
 
   alias Phoenix.LiveView.JS
+  alias PhxTicketsWeb.CommonUtils
 
   @doc """
   Renders a modal.
@@ -597,9 +598,7 @@ defmodule PhxTicketsWeb.CoreComponents do
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class="relative" >
                   {{_, r} = row
-                    # NaiveDateTime.to_string(r.inserted_at)
-                    dt = Timex.to_datetime(r.inserted_at, "Asia/Kolkata")
-                    Calendar.strftime(dt, "%A, %B %d, %Y at %H:%M")
+                    CommonUtils.format_date(r.inserted_at)
                   }
                 </span>
               </div>
