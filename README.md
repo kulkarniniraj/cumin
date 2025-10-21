@@ -21,7 +21,7 @@
      ```sh
      mix phx.server
      ```
-  3. The app runs at [http://localhost:4002](http://localhost:4002)
+  3. The app runs at [http://localhost:4000](http://localhost:4000)
 
 - **Database:**
   - Uses SQLite
