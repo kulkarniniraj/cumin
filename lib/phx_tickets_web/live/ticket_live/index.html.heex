@@ -1,14 +1,24 @@
 <.header>
   Listing Tickets
+  
   <:actions>
     <.link patch={~p"/tickets/new"}>
       <.button>New Ticket</.button>
     </.link>
   </:actions>
+  
 </.header>
+<%= if @is_default_view do %>
+    <%!-- <p class="text-sm text-gray-600 mt-2">Note: By default, only 'open' or 'in progress' tickets (excluding Epics) are shown. Use filters to adjust.</p> --%>
+    <p class="text-sm text-gray-500 italic mt-1 mb-2">
+  By default, only <span class="font-medium">Open</span> or <span class="font-medium">In Progress</span> tickets are displayed (Epics excluded). Use the filters above to refine your results.
+</p>
+  <% end %>
 <%!-- <h1>Current user: {@current_user.name || @current_user.email}</h1> --%>
+
 <form phx-change="filter">
 <div class="flex flex-wrap gap-4 mb-6 w-full">
+  
   
   <!-- Creator Filter -->
   <div class="flex-1 min-w-[180px]">

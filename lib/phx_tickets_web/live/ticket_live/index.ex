@@ -10,6 +10,7 @@ defmodule PhxTicketsWeb.TicketLive.Index do
     {:ok,
       socket
       |> assign(:current_user, user)
+      |> assign(:is_default_view, true)
       |> IO.inspect(label: "Current User")
       |> stream(:tickets, TC.list_filtered_tickets("default"))}
   end
@@ -17,7 +18,8 @@ defmodule PhxTicketsWeb.TicketLive.Index do
   @impl true
   @spec handle_params(any(), any(), map()) :: {:noreply, map()}
   def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+    socket = apply_action(socket, socket.assigns.live_action, params)
+    {:noreply, socket}
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -32,10 +34,12 @@ defmodule PhxTicketsWeb.TicketLive.Index do
     |> assign(:ticket, %Ticket{})
   end
 
-  defp apply_action(socket, :index, _params) do
+  defp apply_action(socket, :index, params) do
+    is_default = is_default_filter_params?(params)
     socket
     |> assign(:page_title, "Listing Tickets")
     |> assign(:ticket, nil)
+    # |> assign(:is_default_view, is_default)
   end
 
   @impl true
@@ -57,13 +61,20 @@ defmodule PhxTicketsWeb.TicketLive.Index do
       "creator" => creator,
       "status" => status,
       "type" => type
-    }, socket) do
+    } = filter_params, socket) do
     IO.inspect(type, label: "Filter Type")
+
+    is_default = is_default_filter_params?(filter_params)
+
     {:noreply,
       socket
       |> stream(:tickets, [], reset: true)
       |> stream(:tickets,
        TC.list_filtered_tickets(creator, type, status, create_time)
-    )}
+      )
+      |> assign(:is_default_view, is_default)
+    }
   end
+
+  defp is_default_filter_params?(_), do: false
 end
