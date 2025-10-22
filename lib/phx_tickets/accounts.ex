@@ -60,6 +60,19 @@ defmodule PhxTickets.Accounts do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
   ## User registration
 
   @doc """

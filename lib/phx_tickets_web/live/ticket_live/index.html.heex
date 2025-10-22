@@ -25,9 +25,9 @@
     <label for="creator" class="block text-sm font-medium text-gray-700 mb-1">Creator</label>
     <select id="creator" name="creator" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
       <option value="">All</option>
-      <!-- Example options, replace with dynamic user list -->
-      <option value="user1@example.com">user1@example.com</option>
-      <option value="user2@example.com">user2@example.com</option>
+      <%= for user <- @users do %>
+        <option value="#{user.email}"><%= user.name %></option>
+      <% end %>
     </select>
   </div>
 
