@@ -33,13 +33,13 @@ defmodule PhxTickets.TC do
     query = from t in Ticket,
       where: t.deleted == false
 
-    query = if type != "" do
+    query = if type != "all" do
       where(query, [t], t.type == ^type)
     else
       query
     end
 
-    query = if status != "" do
+    query = if status != "all" do
       where(query, [t], t.status == ^status)
     else
       query
