@@ -3,14 +3,17 @@ defmodule PhxTicketsWeb.TicketLive.Index do
 
   alias PhxTickets.TC
   alias PhxTickets.TC.Ticket
+  alias PhxTickets.Accounts
 
   @impl true
   def mount(_params, session, socket) do
     user = PhxTickets.Accounts.get_user_by_session_token(session["user_token"])
+    users = PhxTickets.Accounts.list_users()
     {:ok,
       socket
       |> assign(:current_user, user)
       |> assign(:is_default_view, true)
+      |> assign(:users, users)
       |> IO.inspect(label: "Current User")
       |> stream(:tickets, TC.list_filtered_tickets("default"))}
   end

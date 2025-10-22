@@ -49,7 +49,9 @@
 <.progressbar :if={@ticket.children != []} ticket={@ticket}/>
 
 <%!-- Child Tickets --%>
-<.child_tickets child_tickets={@ticket.children} self_ticket={@ticket}/>
+<.child_tickets 
+  child_tickets={TC.list_active_children(@ticket.id)}  
+  self_ticket={@ticket}/>
 
 <!-- Comment Section -->
 <%!-- <.comments comments={@ticket.comments}/> --%>

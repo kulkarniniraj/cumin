@@ -71,6 +71,16 @@ defmodule PhxTickets.TC do
   end
 
   @doc """
+  Returns the list of non deleted child tickets for a given parent ticket ID.
+  """
+  def list_active_children(parent_id) do
+    Ticket
+    |> where([t], t.parent_id == ^parent_id)
+    |> where([t], t.deleted == false)
+    |> Repo.all()
+  end
+
+  @doc """
   Gets a single ticket.
 
   Raises `Ecto.NoResultsError` if the Ticket does not exist.
