@@ -9,17 +9,16 @@ defmodule PhxTicketsWeb.TicketLive.Index do
   def mount(_params, session, socket) do
     user = PhxTickets.Accounts.get_user_by_session_token(session["user_token"])
     users = PhxTickets.Accounts.list_users()
-    filter_params = %{creator: "all", type: "all", status: "all", create_time: "all"} # Initialize filter_params with atom keys
+    filter_params = %{creator: "all", type: "default", status: "default", create_time: "all"} # Initialize filter_params with atom keys
     {:ok,
       socket
       |> assign(current_user: user,
-          is_default_view: true,
           users: users,
           page_title: "",
           ticket: nil,
           filter_params: filter_params) # Assign filter_params
       # |> IO.inspect(label: "Current User")
-      |> stream(:tickets, TC.list_filtered_tickets("default"))}
+      |> stream(:tickets, TC.list_filtered_tickets("all", "default", "default", "all"))}
   end
 
   @impl true
@@ -44,16 +43,15 @@ defmodule PhxTicketsWeb.TicketLive.Index do
   defp apply_action(socket, :index, params) do
     filter_params = %{ # Create filter_params from URL params with atom keys
       creator: Map.get(params, "creator", "all"), # Default to "all"
-      type: Map.get(params, "type", "all"),       # Default to "all"
-      status: Map.get(params, "status", "all"),   # Default to "all"
+      type: Map.get(params, "type", "default"),       # Default to "all"
+      status: Map.get(params, "status", "default"),   # Default to "all"
       create_time: Map.get(params, "create_time", "all") # Default to "all"
     }
-    is_default = is_default_filter_params?(filter_params)
+    IO.inspect(filter_params, label: "Filter Params in apply_action") # Debugging line
     socket
     |> assign(page_title: "Listing Tickets",
         ticket: nil,
-        filter_params: filter_params, # Assign filter_params
-        is_default_view: is_default) # Ensure this is correctly assigned
+        filter_params: filter_params)# Assign filter_params
   end
 
   @impl true
@@ -73,25 +71,13 @@ defmodule PhxTicketsWeb.TicketLive.Index do
     filter_params = %{creator: creator, type: type, status: status, create_time: create_time} # Convert to atom keys
     IO.inspect(filter_params.type, label: "Filter Type") # Use atom key
 
-    is_default = is_default_filter_params?(filter_params)
-
     {:noreply,
       socket
       |> stream(:tickets, [], reset: true)
       |> stream(:tickets,
        TC.list_filtered_tickets(filter_params.creator, filter_params.type, filter_params.status, filter_params.create_time) # Use atom keys
       )
-      |> assign(:is_default_view, is_default)
       |> assign(:filter_params, filter_params) # Assign the new filter_params map with atom keys
     }
   end
-
-  defp is_default_filter_params?(%{ # Updated to accept map with atom keys
-         create_time: "all",
-         creator: "all",
-         status: "all",
-         type: "all"
-       }),
-       do: true
-  defp is_default_filter_params?(_), do: false
 end

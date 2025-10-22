@@ -33,16 +33,22 @@ defmodule PhxTickets.TC do
     query = from t in Ticket,
       where: t.deleted == false
 
-    query = if type != "all" do
-      where(query, [t], t.type == ^type)
-    else
-      query
+    query = case type do
+      "default" ->
+        where(query, [t], t.type != "Epic")
+      "all" ->
+        query
+      _ ->
+        where(query, [t], t.type == ^type)
     end
 
-    query = if status != "all" do
-      where(query, [t], t.status == ^status)
-    else
-      query
+    query = case status do
+      "default" ->
+        where(query, [t], t.status in ["open", "in_progress"])
+      "all" ->
+        query
+      _ ->
+        where(query, [t], t.status == ^status)
     end
 
     Repo.all(query)
