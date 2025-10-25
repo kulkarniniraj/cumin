@@ -3,3 +3,19 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+/* assets/css/app.css */
+.markdown-body {
+    /* font-family: "Georgia", serif;
+    line-height: 1.6;
+    font-size: 16px;
+    color: #333; */
+    all: revert;
+  }
+  
+  /* Styling for markdown headers */
+.markdown-body *  {
+    all:revert;
+}
+
+  /* Add any other markdown-specific styles here */
+  

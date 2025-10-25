@@ -78,7 +78,7 @@ defmodule PhxTicketsWeb.CustomComponents do
         <span class="font-bold mr-2">{user_name}</span>
         <span class="text-xs text-gray-500">{CommonUtils.format_date(@comment.inserted_at, true)}</span>
       </div>
-      <div>{@comment.body}</div>
+      <div class="markdown-body">{Phoenix.HTML.raw(Earmark.as_html!(@comment.body))}</div>
       <%= if @user == "Alice" do %>
         <div class="flex gap-4 mt-3">
           <a href="#" class="text-blue-600 hover:underline text-sm">Edit</a>
@@ -100,7 +100,8 @@ defmodule PhxTicketsWeb.CustomComponents do
       <h2 class="text-lg font-semibold mb-4">Comments</h2>
 
       <.form class="flex gap-2 mb-6" for={@form} phx-submit="add_comment" id={"form-#{@formid}"}>
-        <input name="comment" type="text" placeholder="Add a comment..." class="flex-1 rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
+        <!-- <input name="comment" type="text" placeholder="Add a comment..." class="flex-1 rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/> -->
+        <textarea name="comment" type="text" placeholder="Add a comment..." rows="1" class="flex-1 rounded border border-gray-300 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"/>
         <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Add</button>
       </.form>
       <div class="space-y-4">
