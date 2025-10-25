@@ -4,6 +4,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
 
   alias PhxTicketsWeb.CustomComponents
   alias PhxTickets.TC
+  alias PhxTickets.TC.Ticket # Added this alias
   import PhxTicketsWeb.CustomComponents, only:
     [progressbar: 1, comment: 1, comments: 1, child_tickets: 1]
 
@@ -56,6 +57,26 @@ defmodule PhxTicketsWeb.TicketLive.Show do
     }
   end
 
+  @impl true
+  def handle_event("new_child_ticket", _params, socket) do
+    parent_ticket = socket.assigns.ticket
+    child_type = case parent_ticket.type do
+      "Epic" -> "Story"
+      "Story" -> "Task"
+      _ -> "Task" # Fallback, though button should prevent this for "Task" parent
+    end
+
+    new_child_ticket = %PhxTickets.TC.Ticket{parent_id: parent_ticket.id, type: child_type} # Use full module name here
+
+    {:noreply,
+      socket
+      |> assign(:live_action, :new_child)
+      |> assign(:page_title, "New Child Ticket")
+      |> assign(:new_child_ticket, new_child_ticket) # Assign the new child ticket struct for the form
+
+    }
+  end
+
   defp page_title(:show), do: "Show Ticket"
   defp page_title(:edit), do: "Edit Ticket"
 
@@ -66,4 +87,27 @@ defmodule PhxTicketsWeb.TicketLive.Show do
       "closed" -> "bg-green-500"
     end
   end
+
+  @impl true
+  def handle_info({PhxTicketsWeb.TicketLive.FormComponent, {:saved, child_ticket}}, socket) do
+    current_ticket = socket.assigns.ticket
+    # Check if the saved ticket is a child of the current ticket
+    if child_ticket.parent_id == current_ticket.id do
+      {:noreply,
+        socket
+        |> put_flash(:info, "Child ticket created successfully!")
+        |> assign(:live_action, :show) # Close the modal
+        |> assign(:ticket, TC.get_ticket!(current_ticket.id)) # Re-fetch parent to update children
+      }
+    else
+      # If it's not a child, it might be an edit of the current ticket itself
+      # or some other scenario. For now, just close the modal.
+      {:noreply,
+        socket
+        |> put_flash(:info, "Ticket saved successfully!")
+        |> assign(:live_action, :show) # Close the modal
+      }
+    end
+  end
+
 end

@@ -44,8 +44,15 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
 
   @impl true
   def update(%{ticket: ticket} = assigns, socket) do
-    ticket_options = if ticket.type in ["Story", "Task"] do
-      ticket.type |> TC.list_parent_tickets() |> tickets_to_options()
+    # Determine if parent selection should be shown based on ticket type
+    show_parent = if ticket.type == "Epic", do: false, else: true
+
+    # List parent tickets if applicable
+    ticket_options = if show_parent do
+      # If ticket.type is already set (e.g., prefilled for child ticket), use it
+      # Otherwise, default to "Story" or "Task" for listing parents
+      type_for_parent_list = if ticket.type in ["Story", "Task"], do: ticket.type, else: "Story"
+      type_for_parent_list |> TC.list_parent_tickets() |> tickets_to_options()
     else
       []
     end
@@ -55,14 +62,14 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
      |> assign(assigns)
      |> assign(:status_options, ["open", "in_progress", "closed"])
      |> assign(:type_options, ["Epic", "Story", "Task"])
-     |> assign(:show_parent, true)
+     |> assign(:show_parent, show_parent) # Set show_parent based on ticket.type
      |> assign_new(:form, fn ->
+       # TC.change_ticket will use the prefilled ticket struct
        to_form(TC.change_ticket(ticket))
      end)
      |> assign(:tickets, ticket_options)
-     |> IO.inspect(label: "Socket in new ticket")
+     # |> IO.inspect(label: "Socket in new ticket") # Keep or remove inspect as needed
     }
-
   end
 
   # Handle ticket type change

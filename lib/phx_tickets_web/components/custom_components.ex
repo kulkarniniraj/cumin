@@ -151,10 +151,10 @@ defmodule PhxTicketsWeb.CustomComponents do
 
         <!-- Add Child Ticket Button -->
         <div class="mt-4">
-          <a href="/tickets/new?parent_id=31" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <.button phx-click="new_child_ticket" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
             <span class="mr-2">+</span>
             Add Child Ticket
-          </a>
+          </.button>
         </div>
 
         <%!-- horizontal line --%>
