@@ -79,6 +79,13 @@ defmodule PhxTicketsWeb.TicketLive.Show do
 
   defp page_title(:show), do: "Show Ticket"
   defp page_title(:edit), do: "Edit Ticket"
+  defp get_user_name(user, ticket_user) do
+    if user.id == ticket_user.id do
+      "You"
+    else
+      "#{ticket_user.name} (#{ticket_user.email})"
+    end
+  end
 
   def status_to_color(status) do
     case status do

@@ -13,7 +13,7 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
   <div>
     <span class="block text-sm font-semibold text-gray-700">Creator</span>
-    <span>{@ticket.user.name} ({@ticket.user.email})</span>
+    <span>{get_user_name(@current_user, @ticket.user)}</span>
   </div>
   <div>
     <span class="block text-sm font-semibold text-gray-700">Type</span>
