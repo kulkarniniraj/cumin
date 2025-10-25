@@ -142,6 +142,14 @@ defmodule PhxTicketsWeb.CustomComponents do
     <div class="mt-8 " :if={@self_ticket.type != "Task"}>
         <h2 class="text-lg font-semibold mb-4">Child Tickets</h2>
 
+        <!-- Add Child Ticket Button -->
+        <div class="mt-2 mb-2">
+          <.button phx-click="new_child_ticket" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            <span class="mr-2">+</span>
+            Add Child Ticket
+          </.button>
+        </div>
+
         <div class="space-y-3">
           <%= for ticket <- @child_tickets do %>
             <.child_ticket ticket={ticket}/>
@@ -149,13 +157,7 @@ defmodule PhxTicketsWeb.CustomComponents do
 
         </div>
 
-        <!-- Add Child Ticket Button -->
-        <div class="mt-4">
-          <.button phx-click="new_child_ticket" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-            <span class="mr-2">+</span>
-            Add Child Ticket
-          </.button>
-        </div>
+
 
         <%!-- horizontal line --%>
         <div class="mt-4">
