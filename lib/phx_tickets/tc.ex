@@ -83,6 +83,7 @@ defmodule PhxTickets.TC do
     Ticket
     |> where([t], t.parent_id == ^parent_id)
     |> where([t], t.deleted == false)
+    |> order_by([t], desc: t.inserted_at)
     |> Repo.all()
   end
 
