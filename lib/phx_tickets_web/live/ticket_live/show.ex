@@ -70,7 +70,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
 
     {:noreply,
       socket
-      |> assign(:live_action, :new_child)
+      |> assign(:live_action, :new)
       |> assign(:page_title, "New Child Ticket")
       |> assign(:new_child_ticket, new_child_ticket) # Assign the new child ticket struct for the form
 

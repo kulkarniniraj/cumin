@@ -13,7 +13,7 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
   <div>
     <span class="block text-sm font-semibold text-gray-700">Creator</span>
-    <span>{@ticket.user.email}</span>
+    <span>{@ticket.user.name} ({@ticket.user.email})</span>
   </div>
   <div>
     <span class="block text-sm font-semibold text-gray-700">Type</span>
@@ -61,13 +61,13 @@
     form={@form} 
     formid={@formid}/>
 
-<.modal :if={@live_action in [:edit, :new_child]} id="ticket-modal" show on_cancel={JS.patch(~p"/tickets/#{@ticket}")}>
+<.modal :if={@live_action in [:edit, :new]} id="ticket-modal" show on_cancel={JS.patch(~p"/tickets/#{@ticket}")}>
   <.live_component
     module={PhxTicketsWeb.TicketLive.FormComponent}
     id={@ticket.id || :new} # Use new for new tickets
     title={@page_title}
     action={@live_action}
-    ticket={if @live_action == :new_child, do: @new_child_ticket, else: @ticket}
+    ticket={if @live_action == :new, do: @new_child_ticket, else: @ticket}
     current_user={@current_user}
     patch={~p"/tickets/#{@ticket}"}
   />
