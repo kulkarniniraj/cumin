@@ -79,7 +79,7 @@ defmodule PhxTicketsWeb.CustomComponents do
         <span class="text-xs text-gray-500">{CommonUtils.format_date(@comment.inserted_at, true)}</span>
       </div>
       <div class="markdown-body">{Phoenix.HTML.raw(Earmark.as_html!(@comment.body))}</div>
-      <%= if @user == "Alice" do %>
+      <%= if @user == @comment.user.id do %>
         <div class="flex gap-4 mt-3">
           <a href="#" class="text-blue-600 hover:underline text-sm">Edit</a>
           <a href="#" class="text-red-600 hover:underline text-sm">Delete</a>
