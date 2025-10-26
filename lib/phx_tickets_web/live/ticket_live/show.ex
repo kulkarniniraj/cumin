@@ -87,6 +87,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
     end
   end
 
+  @spec status_to_color(<<_::32, _::_*8>>) :: <<_::64, _::_*8>>
   def status_to_color(status) do
     case status do
       "open" -> "bg-red-500"

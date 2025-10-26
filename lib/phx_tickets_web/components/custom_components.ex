@@ -2,19 +2,18 @@ defmodule PhxTicketsWeb.CustomComponents do
   use Phoenix.Component
   import PhxTicketsWeb.CoreComponents
   alias PhxTicketsWeb.CommonUtils
+  alias PhxTickets.TC
+  require Logger
 
   # alias Phoenix.LiveView.JS
 
   defp calculate_progress(ticket) do
-    total = ticket.children
-    |> Enum.count()
-    completed = ticket.children
-    |> Enum.count(& &1.status == "closed")
-    inprogress = ticket.children
-    |> Enum.count(& &1.status == "in_progress")
-    open = ticket.children
-    |> Enum.count(& &1.status == "open")
-    {total, completed, inprogress, open} |> IO.inspect(label: "Progress details")
+    children = TC.list_active_children(ticket.id)
+    total = children |> Enum.count()
+    completed = children |> Enum.count(& &1.status == "closed")
+    inprogress = children |> Enum.count(& &1.status == "in_progress")
+    open = children |> Enum.count(& &1.status == "open")
+    Logger.debug([data: {total, completed, inprogress, open}, label: "calculate_progress: Ticket progress counts"], [])
     {
       completed * 100 / total,
       inprogress * 100 / total,
@@ -29,6 +28,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   def progressbar(assigns) do
     ticket = assigns[:ticket]
     {complete, inprogress, open} = calculate_progress(ticket)
+    IO.inspect({complete, inprogress, open}, label: "progressbar: Progress percentages")
 
     ~H"""
     <div class="w-full  mx-auto mt-8">
