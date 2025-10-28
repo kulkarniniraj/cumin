@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    image: cumin  # Replace with your actual image name
+    environment:
+      - SECRET_KEY_BASE=e2UCS9KMW8Mvk8b9sV06Fhx7ssrE255LyD8g98bZiwT03X1jYqphKBxZlzjaCtdy
+      - PHX_HOST=localhost
+
+    ports:
+      - "4000:4000"  # Bind port 4000
+    volumes:
+      - cumin-data:/mnt  # Replace /path/on/host with the actual directory you want to mount
+    restart: unless-stopped
+
+volumes:
+  cumin-data:  # Defines the named volume
+
