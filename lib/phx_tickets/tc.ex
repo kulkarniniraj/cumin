@@ -29,7 +29,7 @@ defmodule PhxTickets.TC do
     |> Repo.all()
   end
 
-  def list_filtered_tickets(user, type, status, create_time) do
+  def list_filtered_tickets(_user, type, status, _create_time) do
     query = from t in Ticket,
       where: t.deleted == false
 
@@ -52,6 +52,7 @@ defmodule PhxTickets.TC do
     end
 
     Repo.all(query)
+    |> Repo.preload([:user])
   end
 
   @doc """

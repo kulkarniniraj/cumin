@@ -69,13 +69,14 @@
   </div>
 </div>
 </form>
+
 <.ticket_table
   id="tickets"
   rows={@streams.tickets}
   row_click={fn {_id, ticket} -> JS.navigate(~p"/tickets/#{ticket}") end}  
 >
-  <:col :let={{_id, ticket}} label="Title" width="4/12">{ticket.title}</:col>
-  <:col :let={{_id, ticket}} label="Creator" width="2/12">Creator</:col>
+  <:col :let={{_id, ticket}} label="Title" width="3/12">{ticket.title}</:col>
+  <:col :let={{_id, ticket}} label="Creator" width="2/12">{ticket.user.name}</:col>
   <:col :let={{_id, ticket}} label="Type" width="1/12">{ticket.type}</:col>
   <:col :let={{_id, ticket}} label="Status" width="2/12">{ticket.status}</:col>
   <:col :let={{_id, ticket}} label="Create Time" width="2/12">{ticket.inserted_at}</:col>
