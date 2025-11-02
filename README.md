@@ -14,7 +14,7 @@
 - **Setup:**
   - Get docker-compose.yml from this repo
     - Either clone the entire Repo
-    - Or download docker-compose.yml from this repo (https://github.com/kulkarniniraj/phx_tickets/blob/main/docker-compose.yml) and save it as `docker-compose.yml` in the same directory
+    - Or download docker-compose.yml from this repo [https://github.com/kulkarniniraj/phx_tickets/blob/main/docker-compose.yml](docker-compose.yml) and save it as `docker-compose.yml` in the same directory
   - Run `docker-compose up -d`
     
 ### 2. Build your own image
