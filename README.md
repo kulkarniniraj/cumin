@@ -5,7 +5,34 @@
 
 ---
 
-## How to Run (Development)
+## How to Run 
+
+### 1. Using Docker, published image (Recommended)
+- **Requirements:**
+  - Docker
+  - Docker Compose
+- **Setup:**
+  - Get docker-compose.yml from this repo
+    - Either clone the entire Repo
+    - Or download docker-compose.yml from this repo (https://github.com/kulkarniniraj/phx_tickets/blob/main/docker-compose.yml) and save it as `docker-compose.yml` in the same directory
+  - Run `docker-compose up -d`
+    
+### 2. Build your own image
+- **Requirements:**
+  - Docker
+  - Docker Compose
+  - Git
+  - Elixir 1.18
+  - Erlang/OTP 28
+  - Dependencies as specified in `mix.exs`
+- **Setup:**
+  - Clone the entire Repo
+  - Run `mix deps.get`
+  - Run `docker build -t <your-image-name> .`
+  - Run `docker run -d -p 4000:4000 -v <your-project-folder>:/mnt <your-image-name>`
+  - The app runs at [http://localhost:4000](http://localhost:4000)
+
+### 3. Run from source, for development 
 
 - **Requirements:**
   - Elixir 1.18
