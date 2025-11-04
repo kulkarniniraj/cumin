@@ -17,11 +17,11 @@ defmodule PhxTicketsWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/", PhxTicketsWeb do
-    pipe_through :browser
+  # scope "/", PhxTicketsWeb do
+  #   pipe_through :browser
 
-    get "/", PageController, :home
-  end
+  #   get "/", PageController, :home
+  # end
 
   # Other scopes may use custom stacks.
   # scope "/api", PhxTicketsWeb do
@@ -70,6 +70,7 @@ defmodule PhxTicketsWeb.Router do
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
     end
 
+    live "/", TicketLive.Index, :index
     live "/tickets", TicketLive.Index, :index
     live "/tickets/new", TicketLive.Index, :new
     live "/tickets/:id/edit", TicketLive.Index, :edit
