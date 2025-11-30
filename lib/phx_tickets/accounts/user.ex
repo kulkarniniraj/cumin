@@ -4,6 +4,7 @@ defmodule PhxTickets.Accounts.User do
 
   schema "users" do
     field :name, :string
+    field :is_admin, :boolean, default: false
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
@@ -40,7 +41,7 @@ defmodule PhxTickets.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:name, :email, :password])
+    |> cast(attrs, [:name, :email, :password, :is_admin])
     |> validate_email(opts)
     |> validate_password(opts)
   end
