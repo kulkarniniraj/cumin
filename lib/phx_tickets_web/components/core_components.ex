@@ -577,7 +577,7 @@ defmodule PhxTicketsWeb.CoreComponents do
                 <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
                 <span class="relative">
                   {{_, r} = row
-                  r.user.name}
+                  r.assignee.name}
                 </span>
               </div>
             </td>

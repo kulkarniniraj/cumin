@@ -2,6 +2,7 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
   use PhxTicketsWeb, :live_component
 
   alias PhxTickets.TC
+  alias PhxTickets.Accounts
 
   @impl true
   def render(assigns) do
@@ -27,6 +28,8 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
         options={@tickets} value={@ticket.parent_id || ""} prompt="Select parent ticket" />
         <.input field={@form[:status]} type="select" label="Status"
         options={@status_options} value={@ticket.status} />
+        <.input field={@form[:assignee_id]} type="select" label="Assignee"
+        options={@assignee_options} value={@ticket.assignee_id || @ticket.user_id} />
 
         <:actions>
           <.button phx-disable-with="Saving...">Save Ticket</.button>
@@ -39,6 +42,12 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
   defp tickets_to_options(tickets) do
     Enum.map(tickets, fn t ->
       {t.title, t.id}
+    end)
+  end
+
+  defp users_to_options(users) do
+    Enum.map(users, fn u ->
+      {u.name, u.id}
     end)
   end
 
@@ -57,12 +66,15 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
       []
     end
 
+    users = Accounts.list_users()
+
     {:ok,
      socket
      |> assign(assigns)
      |> assign(:status_options, ["open", "in_progress", "closed"])
      |> assign(:type_options, ["Epic", "Story", "Task"])
      |> assign(:show_parent, show_parent) # Set show_parent based on ticket.type
+     |> assign(:assignee_options, users_to_options(users))
      |> assign_new(:form, fn ->
        # TC.change_ticket will use the prefilled ticket struct
        to_form(TC.change_ticket(ticket))

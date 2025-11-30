@@ -16,6 +16,10 @@
     <span>{get_user_name(@current_user, @ticket.user)}</span>
   </div>
   <div>
+    <span class="block text-sm font-semibold text-gray-700">Assignee</span>
+    <span>{get_user_name(@current_user, @ticket.assignee)}</span>
+  </div>
+  <div>
     <span class="block text-sm font-semibold text-gray-700">Type</span>
     <span>{@ticket.type}</span>
   </div>  

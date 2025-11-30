@@ -30,12 +30,12 @@
 <div class="flex flex-wrap gap-4 mb-6 w-full">
   
   
-  <!-- Creator Filter -->
+  <!-- Assignee Filter -->
   <div class="flex-1 min-w-[180px]">
-    <label for="creator" class="block text-sm font-medium text-gray-700 mb-1">Creator</label>
-    <select id="creator" name="creator" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-      <option value="all" selected={@filter_params[:creator] == "all"}>All</option>
-      <option :for={user <- @users} value={user.email} selected={@filter_params[:creator] == user.email}>{user.name}</option>
+    <label for="assignee" class="block text-sm font-medium text-gray-700 mb-1">Assignee</label>
+    <select id="assignee" name="assignee" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+      <option value="all" selected={@filter_params[:assignee] == "all"}>All</option>
+      <option :for={user <- @users} value={user.email} selected={@filter_params[:assignee] == user.email}>{user.name}</option>
     </select>
   </div>
 
@@ -89,7 +89,7 @@
   row_click={fn {_id, ticket} -> JS.navigate(~p"/tickets/#{ticket}") end}  
 >
   <:col :let={{_id, ticket}} label="Title" width="3/12">{ticket.title}</:col>
-  <:col :let={{_id, ticket}} label="Creator" width="2/12">{ticket.user.name}</:col>
+  <:col :let={{_id, ticket}} label="Assignee" width="2/12">{ticket.assignee.name}</:col>
   <:col :let={{_id, ticket}} label="Type" width="1/12">{ticket.type}</:col>
   <:col :let={{_id, ticket}} label="Status" width="2/12">{ticket.status}</:col>
   <:col :let={{_id, ticket}} label="Create Time" width="2/12">{ticket.inserted_at}</:col>

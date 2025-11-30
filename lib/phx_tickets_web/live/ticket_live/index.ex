@@ -4,12 +4,15 @@ defmodule PhxTicketsWeb.TicketLive.Index do
   alias PhxTickets.TC
   alias PhxTickets.TC.Ticket
   alias PhxTickets.Accounts
-
+  require Logger
   @impl true
   def mount(_params, session, socket) do
     user = PhxTickets.Accounts.get_user_by_session_token(session["user_token"])
     users = PhxTickets.Accounts.list_users()
-    filter_params = %{creator: "all", type: "default", status: "default", create_time: "all"} # Initialize filter_params with atom keys
+    filter_params = %{assignee: "all", type: "default", status: "default", create_time: "all"} # Initialize filter_params with atom keys
+    all_tickets = TC.list_filtered_tickets("all", "default", "default", "all")
+    # log ticket title and assignee for each ticket
+    Logger.debug([data: all_tickets |> Enum.map(fn ticket -> {ticket.title, ticket.assignee.name} end), label: "All Tickets"], [])
     {:ok,
       socket
       |> assign(current_user: user,
@@ -18,7 +21,9 @@ defmodule PhxTicketsWeb.TicketLive.Index do
           ticket: nil,
           filter_params: filter_params) # Assign filter_params
       # |> IO.inspect(label: "Current User")
-      |> stream(:tickets, TC.list_filtered_tickets("all", "default", "default", "all"))}
+      |> stream(:tickets,
+          all_tickets)
+    }
   end
 
   @impl true
@@ -42,7 +47,7 @@ defmodule PhxTicketsWeb.TicketLive.Index do
 
   defp apply_action(socket, :index, params) do
     filter_params = %{ # Create filter_params from URL params with atom keys
-      creator: Map.get(params, "creator", "all"), # Default to "all"
+      assignee: Map.get(params, "assignee", "all"), # Default to "all"
       type: Map.get(params, "type", "default"),       # Default to "all"
       status: Map.get(params, "status", "default"),   # Default to "all"
       create_time: Map.get(params, "create_time", "all") # Default to "all"
@@ -67,15 +72,15 @@ defmodule PhxTicketsWeb.TicketLive.Index do
     {:noreply, stream_delete(socket, :tickets, ticket)}
   end
 
-  def handle_event("filter", %{"creator" => creator, "type" => type, "status" => status, "create_time" => create_time}, socket) do # Pattern match for string keys
-    filter_params = %{creator: creator, type: type, status: status, create_time: create_time} # Convert to atom keys
+  def handle_event("filter", %{"assignee" => assignee, "type" => type, "status" => status, "create_time" => create_time}, socket) do # Pattern match for string keys
+    filter_params = %{assignee: assignee, type: type, status: status, create_time: create_time} # Convert to atom keys
     IO.inspect(filter_params.type, label: "Filter Type") # Use atom key
 
     {:noreply,
       socket
       |> stream(:tickets, [], reset: true)
       |> stream(:tickets,
-       TC.list_filtered_tickets(filter_params.creator, filter_params.type, filter_params.status, filter_params.create_time) # Use atom keys
+       TC.list_filtered_tickets(filter_params.assignee, filter_params.type, filter_params.status, filter_params.create_time) # Use atom keys
       )
       |> assign(:filter_params, filter_params) # Assign the new filter_params map with atom keys
     }

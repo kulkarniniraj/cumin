@@ -29,9 +29,18 @@ defmodule PhxTickets.TC do
     |> Repo.all()
   end
 
-  def list_filtered_tickets(_user, type, status, _create_time) do
+  def list_filtered_tickets(assignee, type, status, _create_time) do
     query = from t in Ticket,
       where: t.deleted == false
+
+    query = case assignee do
+      "all" ->
+        query
+      _ ->
+        from t in query,
+          join: u in assoc(t, :assignee),
+          where: u.email == ^assignee
+    end
 
     query = case type do
       "default" ->
@@ -52,7 +61,7 @@ defmodule PhxTickets.TC do
     end
 
     Repo.all(query)
-    |> Repo.preload([:user])
+    |> Repo.preload([:user, :assignee])
   end
 
   @doc """
@@ -104,7 +113,7 @@ defmodule PhxTickets.TC do
   """
   def get_ticket!(id) do
     Repo.get!(Ticket, id)
-    |> Repo.preload([:user, :parent, :children, comments: [:user]])
+    |> Repo.preload([:user, :assignee, :parent, :children, comments: [:user]])
   end
 
   @doc """
@@ -122,6 +131,7 @@ defmodule PhxTickets.TC do
   def create_ticket(attrs \\ %{}) do
     %Ticket{}
     |> Ticket.changeset(attrs)
+    |> Ecto.Changeset.put_change(:assignee_id, attrs["user_id"])
     |> Repo.insert()
   end
 
