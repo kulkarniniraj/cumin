@@ -85,6 +85,9 @@ defmodule PhxTicketsWeb.Router do
     live "/comments/:id", CommentLive.Show, :show
     live "/comments/:id/show/edit", CommentLive.Show, :edit
 
+    live "/admin", AdminLive.Index, :index
+
+
 
   end
 
