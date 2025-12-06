@@ -38,4 +38,14 @@ npm-debug.log
 # Database files
 *.db
 *.db-*
-
+.tool-versions
+cumin-logo.zip
+scrap*
+assets/images/cumin-logo/*
+assets/images/cumin-logo/vector/*
+!assets/images/cumin-logo/vector
+!assets/images/cumin-logo/vector/default-monochrome.svg
+migrate
+migrate.bat
+server
+server.bat
