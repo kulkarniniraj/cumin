@@ -120,19 +120,20 @@ defmodule PhxTicketsWeb.CustomComponents do
   def child_ticket(assigns) do
     ~H"""
     <!-- Child Ticket -->
-    <div class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
-      <div class="flex items-center justify-between">
-        <div class="flex-1">
-          <h3 class="font-semibold text-gray-900">{@ticket.title}</h3>
-          <div class="flex items-center gap-4 mt-1 text-sm text-gray-600">
-            <span>Type: {@ticket.type}</span>
-            <span class={["inline-block px-2 py-1 rounded text-xs font-semibold text-white", PhxTicketsWeb.TicketLive.Show.status_to_color(@ticket.status)]}>{@ticket.status}</span>
+    <div class="border border-gray-300 shadow-lg rounded-lg p-4 hover:bg-gray-50">
+      <.link href={"/tickets/#{@ticket.id}"} class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+        <div class="flex items-center justify-between">
+          <div class="flex-1">
+            <h3 class="font-semibold text-gray-900">{@ticket.title}</h3>
+            <div class="flex items-center gap-4 mt-1 text-sm text-gray-600">
+              <span>Type: {@ticket.type}</span>
+              <span class={["inline-block px-2 py-1 rounded text-xs font-semibold text-white", PhxTicketsWeb.TicketLive.Show.status_to_color(@ticket.status)]}>{@ticket.status}</span>
 
-            <span>Created: {@ticket.inserted_at}</span>
+              <span>Created: {@ticket.inserted_at}</span>
+            </div>
           </div>
         </div>
-        <.link href={"/tickets/#{@ticket.id}"} class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">View →</.link>
-      </div>
+      </.link>
     </div>
     """
   end
@@ -140,7 +141,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   def child_tickets(assigns) do
     ~H"""
     <!-- Child Tickets Section -->
-    <div class="mt-8 " :if={@self_ticket.type != "Task"}>
+    <div class="mt-8" :if={@self_ticket.type != "Task"}>
         <h2 class="text-lg font-semibold mb-4">Child Tickets</h2>
 
         <!-- Add Child Ticket Button -->
