@@ -60,7 +60,8 @@ defmodule PhxTickets.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:timex, "~> 3.7"},
-      {:earmark, "~> 1.4"}
+      {:earmark, "~> 1.4"},
+      {:live_debugger, "~> 0.4.0", only: :dev}
     ]
   end
 
