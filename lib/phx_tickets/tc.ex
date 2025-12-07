@@ -113,7 +113,8 @@ defmodule PhxTickets.TC do
   """
   def get_ticket!(id) do
     Repo.get!(Ticket, id)
-    |> Repo.preload([:user, :assignee, :parent, :children, comments: [:user]])
+    |> Repo.preload([:user, :assignee, :parent, comments: [:user]])
+    |> Map.put(:children, list_active_children(id))
   end
 
   @doc """

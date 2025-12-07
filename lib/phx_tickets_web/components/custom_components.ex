@@ -120,7 +120,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   def child_ticket(assigns) do
     ~H"""
     <!-- Child Ticket -->
-    <div class="border border-gray-300 shadow-lg rounded-lg p-4 hover:bg-gray-50">
+    <div id={@id} class="border border-gray-300 shadow-lg rounded-lg p-4 hover:bg-gray-50">
       <.link href={"/tickets/#{@ticket.id}"} class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
         <div class="flex items-center justify-between">
           <div class="flex-1">
@@ -153,8 +153,8 @@ defmodule PhxTicketsWeb.CustomComponents do
         </div>
 
         <div class="space-y-3">
-          <%= for ticket <- @child_tickets do %>
-            <.child_ticket ticket={ticket}/>
+          <%= for ticket <- @self_ticket.children, key={ticket.id} do %>
+            <.child_ticket id={"cticket-#{ticket.id}"} ticket={ticket}/>
           <% end %>
 
         </div>

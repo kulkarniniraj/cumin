@@ -24,6 +24,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
       %CustomComponents.Comment{body: "Can we clarify the requirements for the next phase?", user: "Bob", inserted_at: "2024-07-12 11:00"},
       %CustomComponents.Comment{body: "I have pushed a fix for the reported bug.", user: "Charlie", inserted_at: "2024-07-12 12:30"}
     ]
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
@@ -105,7 +106,7 @@ defmodule PhxTicketsWeb.TicketLive.Show do
         socket
         |> put_flash(:info, "Child ticket created successfully!")
         |> assign(:live_action, :show) # Close the modal
-        |> assign(:ticket, TC.get_ticket!(current_ticket.id)) # Re-fetch parent to update children
+        |> assign(:ticket, TC.get_ticket!(current_ticket.id))
       }
     else
       # If it's not a child, it might be an edit of the current ticket itself
