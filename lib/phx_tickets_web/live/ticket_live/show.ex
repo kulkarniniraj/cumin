@@ -4,9 +4,9 @@ defmodule PhxTicketsWeb.TicketLive.Show do
 
   alias PhxTicketsWeb.CustomComponents
   alias PhxTickets.TC
-  alias PhxTickets.TC.Ticket # Added this alias
+  # alias PhxTickets.TC.Ticket # Added this alias
   import PhxTicketsWeb.CustomComponents, only:
-    [progressbar: 1, comment: 1, comments: 1, child_tickets: 1]
+    [progressbar: 1, comments: 1, child_tickets: 1]
 
   @impl true
   def mount(_params, session, socket) do

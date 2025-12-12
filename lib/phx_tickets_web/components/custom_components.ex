@@ -28,6 +28,11 @@ defmodule PhxTicketsWeb.CustomComponents do
   def progressbar(assigns) do
     ticket = assigns[:ticket]
     {complete, inprogress, open} = calculate_progress(ticket)
+    assigns = assign(assigns,
+      complete: complete,
+      inprogress: inprogress,
+      open: open
+    )
     IO.inspect({complete, inprogress, open}, label: "progressbar: Progress percentages")
 
     ~H"""
@@ -38,11 +43,11 @@ defmodule PhxTicketsWeb.CustomComponents do
       </div>
       <div class="flex h-6 w-full rounded overflow-hidden shadow bg-gray-200">
         <!-- Completed (Green) -->
-        <div class="bg-green-500 h-full" style={"width: #{complete}%"}></div>
+        <div class="bg-green-500 h-full" style={"width: #{@complete}%"}></div>
         <!-- In Progress (Blue) -->
-        <div class="bg-blue-500 h-full" style={"width: #{inprogress}%"}></div>
+        <div class="bg-blue-500 h-full" style={"width: #{@inprogress}%"}></div>
         <!-- Open (Red) -->
-        <div class="bg-red-500 h-full" style={"width: #{open}%"}></div>
+        <div class="bg-red-500 h-full" style={"width: #{@open}%"}></div>
       </div>
       <!-- Legend -->
       <div class="flex justify-between mt-2 text-sm">
@@ -71,11 +76,12 @@ defmodule PhxTicketsWeb.CustomComponents do
     else
       assigns.comment.user.name
     end
+    assigns = assign(assigns, :user_name, user_name)
 
     ~H"""
     <div class="bg-gray-100 p-4 rounded">
       <div class="flex items-center mb-2">
-        <span class="font-bold mr-2">{user_name}</span>
+        <span class="font-bold mr-2">{@user_name}</span>
         <span class="text-xs text-gray-500">{CommonUtils.format_date(@comment.inserted_at, true)}</span>
       </div>
       <div class="markdown-body">{Phoenix.HTML.raw(Earmark.as_html!(@comment.body))}</div>
@@ -95,6 +101,7 @@ defmodule PhxTicketsWeb.CustomComponents do
   attr :current_user, :any, required: true
   def comments(assigns) do
     reverse_comments = Enum.reverse(assigns.comments)
+    assigns = assign(assigns, :reverse_comments, reverse_comments)
     ~H"""
     <div class="mt-8 mb-8">
       <h2 class="text-lg font-semibold mb-4">Comments</h2>
@@ -105,7 +112,7 @@ defmodule PhxTicketsWeb.CustomComponents do
         <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Add</button>
       </.form>
       <div class="space-y-4">
-        <%= for comment <- reverse_comments do %>
+        <%= for comment <- @reverse_comments do %>
           <.comment
             comment={comment}
             user={@current_user.id}
@@ -153,7 +160,7 @@ defmodule PhxTicketsWeb.CustomComponents do
         </div>
 
         <div class="space-y-3">
-          <%= for ticket <- @self_ticket.children, key={ticket.id} do %>
+          <%= for ticket <- @self_ticket.children do %>
             <.child_ticket id={"cticket-#{ticket.id}"} ticket={ticket}/>
           <% end %>
 

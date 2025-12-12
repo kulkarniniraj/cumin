@@ -7,8 +7,8 @@ defmodule PhxTicketsWeb.TicketLive.Index do
   require Logger
   @impl true
   def mount(_params, session, socket) do
-    user = PhxTickets.Accounts.get_user_by_session_token(session["user_token"])
-    users = PhxTickets.Accounts.list_users()
+    user = Accounts.get_user_by_session_token(session["user_token"])
+    users = Accounts.list_users()
     filter_params = %{assignee: "all", type: "default", status: "default", create_time: "all"} # Initialize filter_params with atom keys
     all_tickets = TC.list_filtered_tickets("all", "default", "default", "all")
     # log ticket title and assignee for each ticket

@@ -99,7 +99,7 @@
     </div>
     <.link patch={~p"/tickets/#{ticket}/edit"}>Edit</.link>
   </:action>
-  <:action :let={{id, ticket}}>
+  <:action :let={{_id, ticket}}>
     <.link
       phx-click={JS.push("delete", value: %{id: ticket.id})}
       data-confirm="Are you sure?"

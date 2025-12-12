@@ -107,7 +107,7 @@ defmodule PhxTickets.Accounts.User do
     end
   end
 
-  def name_changeset(user, attrs, opts \\ []) do
+  def name_changeset(user, attrs, _opts \\ []) do
     user
     |> cast(attrs, [:name])
     |> validate_required([:name])
