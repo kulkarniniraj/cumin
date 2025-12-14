@@ -22,14 +22,59 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import Alpine from "../vendor/alpine.cdn.min"
+import Chart from "../vendor/chart.js"
+
+window.Chart = Chart
+window.Alpine = Alpine
+Alpine.start()
+
+// Start AlpineJS when LiveView is done loading the page
+window.addEventListener("phx:page-loading-stop", (_info) => Alpine.start());
+
+let Hooks = {}
+Hooks.AdminCharts = {
+  mounted() {
+    const data1 = {
+      labels: ['Red', 'Blue', 'Yellow'],
+      datasets: [{
+        data: [30, 50, 20],
+        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56']
+      }]
+    };
+
+    const data2 = {
+      labels: ['Apples', 'Oranges', 'Bananas'],
+      datasets: [{
+        data: [40, 35, 25],
+        backgroundColor: ['#4bc0c0', '#ff9f40', '#9966ff']
+      }]
+    };
+
+    new Chart(this.el.querySelector('#ticketsByTypeChart'), {
+      type: 'pie',
+      data: data1
+    });
+
+    new Chart(this.el.querySelector('#ticketsByStatusChart'), {
+      type: 'pie',
+      data: data2
+    });
+
+    new Chart(this.el.querySelector('#ticketsByUserChart'), {
+      type: 'pie',
+      data: data2
+    });
+  }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
-  params: {_csrf_token: csrfToken}
+  params: {_csrf_token: csrfToken},
+  hooks: Hooks
 })
 
-window.Alpine = Alpine
+
 // Alpine.start()
 
 // Show progress bar on live navigation and form submits
