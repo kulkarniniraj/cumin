@@ -85,10 +85,10 @@ defmodule PhxTicketsWeb.Router do
     live "/comments/:id", CommentLive.Show, :show
     live "/comments/:id/show/edit", CommentLive.Show, :edit
 
-    live "/admin", AdminLive.Index, :index
-
-
-
+    live_session :admin_only, on_mount: [{PhxTicketsWeb.UserAuth, :ensure_authenticated}, {PhxTicketsWeb.UserAuth, :ensure_admin}] do
+      live "/admin", AdminLive.Index, :index
+      live "/admin/projects/new", ProjectLive.Form, :new
+    end
   end
 
   scope "/", PhxTicketsWeb do

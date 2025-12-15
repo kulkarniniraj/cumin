@@ -174,6 +174,21 @@ defmodule PhxTicketsWeb.UserAuth do
     end
   end
 
+  def on_mount(:ensure_admin, _params, session, socket) do
+    socket = mount_current_user(socket, session)
+
+    if socket.assigns.current_user && socket.assigns.current_user.is_admin do
+      {:cont, socket}
+    else
+      socket =
+        socket
+        |> Phoenix.LiveView.put_flash(:error, "You must be an admin to access this page.")
+        |> Phoenix.LiveView.redirect(to: ~p"/")
+
+      {:halt, socket}
+    end
+  end
+
   defp mount_current_user(socket, session) do
     Phoenix.Component.assign_new(socket, :current_user, fn ->
       if user_token = session["user_token"] do
@@ -226,4 +241,13 @@ defmodule PhxTicketsWeb.UserAuth do
   defp maybe_store_return_to(conn), do: conn
 
   defp signed_in_path(_conn), do: ~p"/"
+
+  @doc """
+  Used for routes that require the user to be an admin.
+  """
+  def require_admin_user(conn, _opts) do
+    # TODO: Implement actual admin user check
+    conn
+  end
+
 end
