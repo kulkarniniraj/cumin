@@ -2,11 +2,8 @@
   <div class="w-2/5 max-w-3xl rounded-3xl border border-zinc-200 bg-gray-100 shadow-xl shadow-indigo-300 ">
     
     <form class="sm:flex sm:items-center sm:gap-3 sm:space-y-0">
-      <select id="project_selection" name="project_selection" class="w-full rounded-2xl border border-zinc-300 bg-white text-base font-medium text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-200">
-        <option value="all" selected="">All Projects</option>
-        <option value="project_a">Project Alpha</option>
-        <option value="project_b">Project Beta</option>
-        <option value="project_c">Project Gamma</option>
+      <select id="project_selection" name="project_selection" class="w-full rounded-2xl border border-zinc-300 bg-white text-base font-medium text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-200" phx-change="filter_by_project">
+        <option :for={project <- @projects} value={project.id}><%= project.name %></option>
       </select>      
     </form>
   </div>

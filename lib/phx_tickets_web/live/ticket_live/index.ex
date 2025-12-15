@@ -9,6 +9,7 @@ defmodule PhxTicketsWeb.TicketLive.Index do
   def mount(_params, session, socket) do
     user = Accounts.get_user_by_session_token(session["user_token"])
     users = Accounts.list_users()
+    projects = TC.list_projects()
     filter_params = %{assignee: "all", type: "default", status: "default", create_time: "all"} # Initialize filter_params with atom keys
     all_tickets = TC.list_filtered_tickets("all", "default", "default", "all")
     # log ticket title and assignee for each ticket
@@ -17,6 +18,7 @@ defmodule PhxTicketsWeb.TicketLive.Index do
       socket
       |> assign(current_user: user,
           users: users,
+          projects: projects,
           page_title: "",
           ticket: nil,
           filter_params: filter_params) # Assign filter_params
@@ -70,6 +72,18 @@ defmodule PhxTicketsWeb.TicketLive.Index do
     {:ok, _} = TC.delete_ticket(ticket)
 
     {:noreply, stream_delete(socket, :tickets, ticket)}
+  end
+
+  def handle_event("filter_by_project", %{"project_selection" => project_id}, socket) do
+    IO.inspect(project_id, label: "Selected Project ID")
+    tickets = TC.list_filtered_tickets(project_id)
+    filter_params = Map.put(socket.assigns.filter_params, :project_id, project_id)
+
+    {:noreply,
+      socket
+      |> stream(:tickets, tickets, reset: true)
+      |> assign(:filter_params, filter_params)
+    }
   end
 
   def handle_event("filter", %{"assignee" => assignee, "type" => type, "status" => status, "create_time" => create_time}, socket) do # Pattern match for string keys

@@ -41,6 +41,19 @@ defmodule PhxTickets.TC do
   end
 
   @doc """
+  Returns the list of all projects.
+
+  ## Examples
+
+      iex> list_projects()
+      [%Project{}, ...]
+
+  """
+  def list_projects do
+    Repo.all(Project)
+  end
+
+  @doc """
   Returns the list of tickets.
 
   ## Examples
@@ -53,48 +66,45 @@ defmodule PhxTickets.TC do
     Repo.all(Ticket)
   end
 
-  def list_filtered_tickets("default") do
-    Ticket
-    |> where([t], t.status in ["open", "in_progress"])
-    |> where([t], t.type != "Epic")
-    |> where([t], t.deleted == false)
-    |> Repo.all()
+  def list_filtered_tickets(assignee, type, status, _create_time) do
+    projects = list_projects()
+
+    if Enum.empty?(projects) do
+      []
+    else
+      first_project_id = hd(projects).id
+      _list_filtered_tickets(first_project_id, assignee, type, status, "all")
+    end
   end
 
-  def list_filtered_tickets(assignee, type, status, _create_time) do
-    query = from t in Ticket,
-      where: t.deleted == false
+  def list_filtered_tickets(project_id) do
+    _list_filtered_tickets(project_id, "all", "default", "default", "all")
+  end
 
-    query = case assignee do
-      "all" ->
-        query
-      _ ->
-        from t in query,
-          join: u in assoc(t, :assignee),
-          where: u.email == ^assignee
-    end
-
-    query = case type do
-      "default" ->
-        where(query, [t], t.type != "Epic")
-      "all" ->
-        query
-      _ ->
-        where(query, [t], t.type == ^type)
-    end
-
-    query = case status do
-      "default" ->
-        where(query, [t], t.status in ["open", "in_progress"])
-      "all" ->
-        query
-      _ ->
-        where(query, [t], t.status == ^status)
-    end
-
-    Repo.all(query)
+  defp _list_filtered_tickets(project_id, assignee, type, status, _create_time) do
+    from(t in Ticket, where: t.deleted == false and t.project_id == ^project_id)
+    |> apply_assignee_filter(assignee)
+    |> apply_type_filter(type)
+    |> apply_status_filter(status)
+    |> Repo.all()
     |> Repo.preload([:user, :assignee])
   end
+
+  defp apply_assignee_filter(query, "all"), do: query
+  defp apply_assignee_filter(query, assignee) do
+    from t in query,
+      join: u in assoc(t, :assignee),
+      where: u.email == ^assignee
+  end
+
+  defp apply_type_filter(query, "default"), do: where(query, [t], t.type != "Epic")
+  defp apply_type_filter(query, "all"), do: query
+  defp apply_type_filter(query, type), do: where(query, [t], t.type == ^type)
+
+
+  defp apply_status_filter(query, "default"), do: where(query, [t], t.status in ["open", "in_progress"])
+  defp apply_status_filter(query, "all"), do: query
+  defp apply_status_filter(query, status), do: where(query, [t], t.status == ^status)
 
   @doc """
   Returns the list of parent tickets.
