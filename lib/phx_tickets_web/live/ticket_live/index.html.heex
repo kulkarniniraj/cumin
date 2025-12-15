@@ -3,7 +3,7 @@
     
     <form class="sm:flex sm:items-center sm:gap-3 sm:space-y-0">
       <select id="project_selection" name="project_selection" class="w-full rounded-2xl border border-zinc-300 bg-white text-base font-medium text-zinc-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-4 focus:ring-indigo-200" phx-change="filter_by_project">
-        <option :for={project <- @projects} value={project.id}><%= project.name %></option>
+        <option :for={project <- @projects} value={project.id} selected={@filter_params.project_id == project.id}><%= project.name %></option>
       </select>      
     </form>
   </div>

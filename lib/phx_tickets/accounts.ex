@@ -132,6 +132,25 @@ defmodule PhxTickets.Accounts do
   end
 
   @doc """
+  Updates the user's active project.
+
+  ## Examples
+
+      iex> update_user_active_project(user, project_id)
+      {:ok, %User{}}
+
+      iex> update_user_active_project(user, nil)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user_active_project(%User{} = user, project_id) do
+    user
+    |> User.update_changeset(%{active_project_id: project_id})
+    |> Repo.update()
+  end
+
+
+  @doc """
   Emulates that the email will change without actually changing
   it in the database.
 

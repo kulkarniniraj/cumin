@@ -66,15 +66,8 @@ defmodule PhxTickets.TC do
     Repo.all(Ticket)
   end
 
-  def list_filtered_tickets(assignee, type, status, _create_time) do
-    projects = list_projects()
-
-    if Enum.empty?(projects) do
-      []
-    else
-      first_project_id = hd(projects).id
-      _list_filtered_tickets(first_project_id, assignee, type, status, "all")
-    end
+  def list_filtered_tickets(project_id, assignee, type, status, _create_time) do
+    _list_filtered_tickets(project_id, assignee, type, status, _create_time)
   end
 
   def list_filtered_tickets(project_id) do

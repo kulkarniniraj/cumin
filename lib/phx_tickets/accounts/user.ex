@@ -10,10 +10,19 @@ defmodule PhxTickets.Accounts.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    belongs_to :active_project, PhxTickets.Tc.Project, foreign_key: :active_project_id
     has_many :tickets, PhxTickets.TC.Ticket
     has_many :comments, PhxTickets.TC.Comment
 
     timestamps(type: :utc_datetime)
+  end
+
+  @doc """
+  A user changeset for general updates like name or active project.
+  """
+  def update_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:name, :active_project_id])
   end
 
   @doc """
