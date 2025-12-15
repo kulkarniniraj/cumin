@@ -1,12 +1,12 @@
 defmodule PhxTicketsWeb.ProjectLive.Form do
   use PhxTicketsWeb, :live_view
 
+  alias PhxTickets.TC
+  alias PhxTickets.Tc.Project
+
   def mount(_params, _session, socket) do
-    initial_data = %{"name" => "default project", "description" => "placeholder description"}
-    form = to_form(initial_data, as: :project_params)
-    socket = assign(socket, form: form)
-    IO.inspect(socket, label: "Socket in Project Form Mount")
-    {:ok, socket}
+    form = to_form(TC.change_project(%Project{}))
+    {:ok, assign(socket, form: form)}
   end
 
   def render(assigns) do
@@ -33,33 +33,19 @@ defmodule PhxTicketsWeb.ProjectLive.Form do
     """
   end
 
-  # def handle_event("validate", %{"project_params" => project_params}, socket) do
-  def handle_event("validate", params, socket) do
-    IO.inspect(params, label: "Params in validate event")
-    # socket = assign(socket, :project_params, project_params)
-    {:noreply, socket}
+  def handle_event("validate", %{"project" => project_params}, socket) do
+    changeset = TC.change_project(%Project{}, project_params)
+    {:noreply, assign(socket, form: to_form(changeset, action: :validate))}
   end
 
-  def handle_event("save", %{"project_params" =>
-        %{"name" => name, "description" => description}}, socket) do
-    # IO.inspect(project_params, label: "Project Params in save event")
-    if String.contains?(name, " ") do
-      socket = put_flash(socket, :error, "Project name cannot contain spaces.")
-      {:noreply, socket}
-    else
-      socket = put_flash(socket, :info, "Save event")
-      {:noreply, push_redirect(socket, to: ~p"/")}
-    end
-    # if name && String.trim(name) != "" do
-    #   Phoenix.LiveView.put_flash(socket, :info, "Project '#{name}' created successfully!")
-    #   {:noreply, push_redirect(socket, to: ~p"/")}
-    # else
-    #   socket =
-    #     socket
-    #     |> Phoenix.LiveView.put_flash(:error, "Project name cannot be blank.")
-    #     |> assign(:project_params, project_params)
-    #   {:noreply, socket}
-    # end
+  def handle_event("save", %{"project" => project_params}, socket) do
+    case TC.create_project(project_params) do
+      {:ok, project} ->
+        Phoenix.LiveView.put_flash(socket, :info, "Project '#{project.name}' created successfully!")
+        {:noreply, push_redirect(socket, to: ~p"/")}
 
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, form: to_form(changeset))}
+    end
   end
 end

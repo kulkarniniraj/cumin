@@ -6,7 +6,7 @@ defmodule PhxTickets.Tc.Project do
     field :name, :string
     field :description, :string
 
-    has_many :tickets, PhxTickets.Tc.Ticket
+    has_many :tickets, PhxTickets.TC.Ticket
 
     timestamps()
   end

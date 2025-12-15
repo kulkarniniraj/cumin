@@ -7,6 +7,38 @@ defmodule PhxTickets.TC do
   alias PhxTickets.Repo
 
   alias PhxTickets.TC.Ticket
+  alias PhxTickets.Tc.Project
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking project changes.
+
+  ## Examples
+
+      iex> change_project(project)
+      %Ecto.Changeset{data: %Project{}}
+
+  """
+  def change_project(%Project{} = project, attrs \\ %{}) do
+    Project.changeset(project, attrs)
+  end
+
+  @doc """
+  Creates a project.
+
+  ## Examples
+
+      iex> create_project(%{field: value})
+      {:ok, %Project{}}
+
+      iex> create_project(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_project(attrs \\ %{}) do
+    %Project{}
+    |> Project.changeset(attrs)
+    |> Repo.insert()
+  end
 
   @doc """
   Returns the list of tickets.
