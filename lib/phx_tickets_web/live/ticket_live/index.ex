@@ -12,7 +12,24 @@ defmodule PhxTicketsWeb.TicketLive.Index do
     projects = TC.list_projects()
 
     active_project_id =
-      user.active_project_id || (if Enum.empty?(projects), do: nil, else: hd(projects).id)
+      cond do
+        user == nil ->
+          nil
+        user.active_project_id != nil ->
+          IO.inspect(user.active_project_id, label: "User Active Project ID")
+          user.active_project_id
+        Enum.empty?(projects) ->
+          nil
+        true ->
+          proj_id = hd(projects).id
+          # Update user with this active project
+          Accounts.update_user_active_project(user, proj_id)
+          IO.inspect(proj_id, label: "Setting Active Project ID to")
+          proj_id
+      end
+
+    # active_project_id = user.active_project_id || (if Enum.empty?(projects), do: nil, else: hd(projects).id)
+
 
     filter_params = %{assignee: "all", type: "default", status: "default", create_time: "all", project_id: active_project_id} # Initialize filter_params with atom keys
 

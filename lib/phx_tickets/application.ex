@@ -13,6 +13,8 @@ defmodule PhxTickets.Application do
       {Ecto.Migrator,
         repos: Application.fetch_env!(:phx_tickets, :ecto_repos),
         skip: skip_migrations?()},
+      # Ensure at least one admin user exists
+      {Task, fn -> PhxTickets.Application.EnsureAdmin.run() end},
       {DNSCluster, query: Application.get_env(:phx_tickets, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: PhxTickets.PubSub},
       # Start the Finch HTTP client for sending emails
@@ -42,3 +44,22 @@ defmodule PhxTickets.Application do
     System.get_env("RELEASE_NAME") != nil
   end
 end
+
+defmodule PhxTickets.Application.EnsureAdmin do
+  alias PhxTickets.Accounts
+
+  def run do
+    users = Accounts.list_users()
+    if Enum.empty?(users) do
+      {:ok, _admin} = Accounts.register_user(%{
+          name: "Admin",
+          email: "admin@example.com",
+          password: "password123",
+          is_admin: true
+      })
+      IO.puts("Created default admin user: email: admin@example.com")
+    end
+  end
+end
+
+# [:name, :email, :password, :is_admin]

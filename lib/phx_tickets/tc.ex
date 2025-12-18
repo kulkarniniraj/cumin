@@ -165,10 +165,16 @@ defmodule PhxTickets.TC do
 
   """
   def create_ticket(attrs \\ %{}) do
-    %Ticket{}
+    ret_val = %Ticket{}
     |> Ticket.changeset(attrs)
     |> Ecto.Changeset.put_change(:assignee_id, attrs["user_id"])
     |> Repo.insert()
+    if {:ok, ticket} = ret_val do
+      ticket = Repo.preload(ticket, [:user, :assignee, :parent])
+      {:ok, ticket}
+    else
+      ret_val
+    end
   end
 
   @doc """

@@ -112,7 +112,9 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
 
   def handle_event("save", %{"ticket" => ticket_params}, socket) do
     user = socket.assigns.current_user
-    ticket_params = Map.put(ticket_params, "user_id", user.id)
+    ticket_params = ticket_params
+      |> Map.put("user_id", user.id)
+      |> Map.put("project_id", user.active_project_id)
     save_ticket(socket, socket.assigns.action, ticket_params)
   end
 
@@ -134,6 +136,7 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
   defp save_ticket(socket, :new, ticket_params) do
     case TC.create_ticket(ticket_params) do
       {:ok, ticket} ->
+        IO.inspect(ticket, label: "New Ticket")
         notify_parent({:saved, ticket})
 
         {:noreply,
