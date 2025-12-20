@@ -41,7 +41,16 @@ defmodule PhxTickets.Accounts do
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
     user = Repo.get_by(User, email: email)
-    if User.valid_password?(user, password), do: user
+
+    if user && User.valid_password?(user, password) do
+      if user.confirmed_at do
+        user
+      else
+        {:error, :not_approved}
+      end
+    else
+      nil
+    end
   end
 
   @doc """
@@ -72,6 +81,21 @@ defmodule PhxTickets.Accounts do
   def list_users do
     Repo.all(User)
   end
+
+  @doc """
+  Returns the list of users awaiting approval.
+
+  ## Examples
+
+      iex> list_pending_users()
+      [%User{}, ...]
+
+  """
+  def list_pending_users do
+    from(u in User, where: is_nil(u.confirmed_at))
+    |> Repo.all()
+  end
+
 
   ## User registration
 
@@ -284,7 +308,23 @@ defmodule PhxTickets.Accounts do
     :ok
   end
 
+  @doc """
+  Deletes a user.
+  """
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
+  end
+
   ## Confirmation
+
+  @doc """
+  Approves a user by an admin.
+  """
+  def approve_user(%User{} = user) do
+    user
+    |> User.confirm_changeset()
+    |> Repo.update()
+  end
 
   @doc ~S"""
   Delivers the confirmation email instructions to the given user.

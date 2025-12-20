@@ -9,6 +9,7 @@ defmodule PhxTicketsWeb.AdminLive.Index do
     users = Accounts.list_users()
     tickets = TC.list_tickets()
     comments = TC.list_comments()
+    pending_users = Accounts.list_pending_users()
 
     socket =
       socket
@@ -16,6 +17,7 @@ defmodule PhxTicketsWeb.AdminLive.Index do
       |> assign(:users, users)
       |> assign(:tickets, tickets)
       |> assign(:comments, comments)
+      |> assign(:pending_users, pending_users)
 
     {:ok, socket}
   end
@@ -28,5 +30,27 @@ defmodule PhxTicketsWeb.AdminLive.Index do
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Admin Portal")
+  end
+
+  @impl true
+  def handle_event("approve_user", %{"id" => user_id}, socket) do
+    user = Accounts.get_user!(user_id)
+    {:ok, _} = Accounts.approve_user(user)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "#{user.name} has been approved.")
+     |> assign(:pending_users, Accounts.list_pending_users())}
+  end
+
+  @impl true
+  def handle_event("reject_user", %{"id" => user_id}, socket) do
+    user = Accounts.get_user!(user_id)
+    {:ok, _} = Accounts.delete_user(user)
+
+    {:noreply,
+     socket
+     |> put_flash(:info, "#{user.name} has been rejected and their account deleted.")
+     |> assign(:pending_users, Accounts.list_pending_users())}
   end
 end
