@@ -48,7 +48,8 @@
 </div>
 <div class="mt-4">
     <span class="block text-sm font-semibold text-gray-700">Description</span>
-    <span>{@ticket.description}</span>
+    <%!-- <span>{@ticket.description}</span> --%>
+    <span class="markdown-body">{Phoenix.HTML.raw(Earmark.as_html!(@ticket.description || ""))}</span>
   </div>
 <.progressbar :if={@ticket.children != []} ticket={@ticket}/>
 
