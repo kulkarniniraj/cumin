@@ -144,7 +144,10 @@ defmodule PhxTicketsWeb.UserSettingsLive do
 
     case Accounts.change_user_name(user, user_params) do
       {:ok, user} ->
-        {:noreply, assign(socket, name_form_name: user.name)}
+        {:noreply,
+          socket
+          |> put_flash(:info, "Name updated successfully.")
+          |> assign(name_form_name: user.name)}
 
       {:error, changeset} ->
         {:noreply, assign(socket, name_form: to_form(changeset))}
