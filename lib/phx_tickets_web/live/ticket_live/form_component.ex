@@ -21,7 +21,7 @@ defmodule PhxTicketsWeb.TicketLive.FormComponent do
         phx-submit="save"
       >
         <.input field={@form[:title]} type="text" label="Title" />
-        <.input field={@form[:description]} type="textarea" label="Description" />
+        <.input field={@form[:description]} type="textarea" label="Description" phx-hook="MarkdownIndent" phx-hook="AutosizeTextarea"/>
         <.input field={@form[:type]} type="select" label="Type"
         options={@type_options} prompt="Select ticket type" />
         <.input :if={@show_parent} field={@form[:parent_id]} type="select" label="Parent"

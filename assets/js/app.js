@@ -67,6 +67,107 @@ Hooks.AdminCharts = {
   }
 }
 
+Hooks.MarkdownIndent = {
+  mounted() {
+    this.el.addEventListener("keydown", (event) => {
+      if (event.key === 'Tab' && event.shiftKey) {
+        event.preventDefault();
+        const start = this.el.selectionStart;
+        const end = this.el.selectionEnd;
+        const value = this.el.value;
+
+        // Find the start of the current line or selection
+        let lineStart = value.lastIndexOf('\n', start - 1) + 1;
+        let lineEnd = value.indexOf('\n', end);
+        if (lineEnd === -1) lineEnd = value.length;
+
+        const lines = value.substring(lineStart, lineEnd).split('\n');
+        let newLines = [];
+        let cursorOffset = 0;
+
+        lines.forEach((line, index) => {
+          if (line.startsWith('\t')) {
+            newLines.push(line.substring(1));
+            if (index === 0) cursorOffset = -1; // Adjust cursor if de-indenting the first affected line
+          } else if (line.startsWith('  ')) { // Assuming 2 spaces for soft tabs
+            newLines.push(line.substring(2));
+            if (index === 0) cursorOffset = -2; // Adjust cursor
+          } else {
+            newLines.push(line);
+          }
+        });
+
+        this.el.value = value.substring(0, lineStart) + newLines.join('\n') + value.substring(lineEnd);
+        this.el.selectionStart = start + cursorOffset;
+        this.el.selectionEnd = end + cursorOffset;
+        return;
+      }
+
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        const start = this.el.selectionStart;
+        const end = this.el.selectionEnd;
+
+        // Insert a tab character
+        this.el.value = this.el.value.substring(0, start) + "\t" + this.el.value.substring(end);
+
+        // Move cursor
+        this.el.selectionStart = this.el.selectionEnd = start + 1;
+        return;
+      }
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const cursorPos = this.el.selectionStart;
+        const textBeforeCursor = this.el.value.substring(0, cursorPos);
+        const currentLineStart = textBeforeCursor.lastIndexOf('\n') + 1;
+        const currentLine = textBeforeCursor.substring(currentLineStart);
+
+        const indentMatch = currentLine.match(/^\s*/);
+        const indent = indentMatch ? indentMatch[0] : "";
+
+        const listMarkerMatch = currentLine.match(/^\s*([-*]|\d+\.)\s+/);
+        let newIndent = indent;
+
+        if (listMarkerMatch) {
+            // If it's a list, carry over the indentation and marker type
+            const marker = listMarkerMatch[1];
+            if (/\d+\./.test(marker)) {
+                // It's a numbered list, increment the number
+                const num = parseInt(marker, 10);
+                newIndent = indent.replace(/\d+\./, `${num + 1}.`);
+            } else {
+                // It's a bulleted list
+                newIndent = indent;
+            }
+        }
+        
+        const textToInsert = "\n" + newIndent;
+        const newCursorPos = cursorPos + textToInsert.length;
+
+        // Insert the new line and indentation
+        this.el.value = this.el.value.substring(0, cursorPos) + textToInsert + this.el.value.substring(cursorPos);
+        this.el.selectionStart = this.el.selectionEnd = newCursorPos;
+      }
+    });
+  }
+}
+
+Hooks.AutosizeTextarea = {
+  mounted() {
+    this.el.style.overflow = 'hidden'; // Hide scrollbar
+    this.adjustHeight();
+    this.el.addEventListener('input', () => this.adjustHeight());
+  },
+  updated() {
+    this.adjustHeight();
+  },
+  adjustHeight() {
+    this.el.style.height = 'auto'; // Reset height to auto to shrink
+    this.el.style.height = this.el.scrollHeight + 'px'; // Set height to scrollHeight    
+  }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
