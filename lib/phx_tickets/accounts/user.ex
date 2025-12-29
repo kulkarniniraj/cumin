@@ -2,6 +2,7 @@ defmodule PhxTickets.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, except: [:__meta__, :comments, :active_project, :tickets]}
   schema "users" do
     field :name, :string
     field :is_admin, :boolean, default: false

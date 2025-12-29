@@ -2,6 +2,7 @@ defmodule PhxTickets.TC.Comment do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, except: [:__meta__, :user]}
   schema "comments" do
     field :body, :string
     field :ticket_id, :id

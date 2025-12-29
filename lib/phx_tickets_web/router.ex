@@ -89,6 +89,9 @@ defmodule PhxTicketsWeb.Router do
     live_session :admin_only, on_mount: [{PhxTicketsWeb.UserAuth, :ensure_authenticated}, {PhxTicketsWeb.UserAuth, :ensure_admin}] do
       live "/admin", AdminLive.Index, :index
       live "/admin/projects/new", ProjectLive.Form, :new
+      get "/admin/data/export", DataController, :export
+      get "/admin/data/import", DataController, :import_form
+      post "/admin/data/import", DataController, :run_import
     end
   end
 

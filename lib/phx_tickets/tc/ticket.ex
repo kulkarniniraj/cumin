@@ -2,6 +2,8 @@ defmodule PhxTickets.TC.Ticket do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, except: [:__meta__, :user, :parent, :assignee,
+    :project, :children, :comments]}
   schema "tickets" do
     field :status, :string
     field :description, :string

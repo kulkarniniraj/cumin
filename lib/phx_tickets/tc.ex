@@ -8,6 +8,18 @@ defmodule PhxTickets.TC do
 
   alias PhxTickets.TC.Ticket
   alias PhxTickets.Tc.Project
+  alias PhxTickets.TC.Comment
+  alias PhxTickets.Accounts
+  alias PhxTickets.Accounts.User
+
+  def export_all_data do
+    %{
+      projects: Repo.all(Project),
+      users: Accounts.list_users(),
+      tickets: Repo.all(Ticket),
+      comments: Repo.all(Comment)
+    }
+  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking project changes.
